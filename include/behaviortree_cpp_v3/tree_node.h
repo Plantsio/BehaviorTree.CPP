@@ -278,11 +278,11 @@ inline void assignDefaultRemapping(NodeConfiguration& config)
     {
         const auto& port_name = it.first;
         const auto direction = it.second.direction();
-        if (direction != PortDirection::OUTPUT)
+        if (direction != PortDirection::BT_OUTPUT)
         {
             config.input_ports[port_name] = "=";
         }
-        if (direction != PortDirection::INPUT)
+        if (direction != PortDirection::BT_INPUT)
         {
             config.output_ports[port_name] = "=";
         }

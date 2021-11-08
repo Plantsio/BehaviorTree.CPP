@@ -32,6 +32,13 @@
 
 NAMESPACE_BEGIN(filesystem)
 
+/* fixme */
+char *	realpath (const char *__restrict path, char *__restrict resolved_path){
+    strcpy(resolved_path,path);
+    return resolved_path;
+}
+
+
 /**
  * \brief Simple class for manipulating paths on Linux/Windows/Mac OS
  *
@@ -265,10 +272,11 @@ public:
 
     static path getcwd() {
 #if !defined(_WIN32)
-        char temp[PATH_MAX];
-        if (::getcwd(temp, PATH_MAX) == NULL)
-            throw std::runtime_error("Internal error in getcwd(): " + std::string(strerror(errno)));
-        return path(temp);
+//        char temp[PATH_MAX];
+//        if (::getcwd(temp, PATH_MAX) == NULL)
+//            throw std::runtime_error("Internal error in getcwd(): " + std::string(strerror(errno)));
+//        return path(temp);
+        return path("/bt");
 #else
         std::wstring temp(MAX_PATH, '\0');
         if (!_wgetcwd(&temp[0], MAX_PATH))

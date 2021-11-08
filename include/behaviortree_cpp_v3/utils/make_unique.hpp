@@ -1,18 +1,9 @@
-#pragma once
+//
+// Created by sungaoran on 2021/10/20.
+//
 
-#include <memory>
-
-#if defined(_MSC_VER) && _MSC_VER >= 1900 // MSVC 2015 or newer.
-#  define MAKE_UNIQUE_DEFINED 1
-#endif
-
-#ifdef __cpp_lib_make_unique
-#  define MAKE_UNIQUE_DEFINED 1
-#endif
-
-#ifndef MAKE_UNIQUE_DEFINED
-
-//The compiler doesn't provide it, so implement it ourselves.
+#ifndef PLANTSIO_IVY_C14_H
+#define PLANTSIO_IVY_C14_H
 
 #include <cstddef>
 #include <memory>
@@ -20,34 +11,34 @@
 #include <utility>
 
 namespace std {
+    template<class T> struct _Unique_if {
+        typedef unique_ptr<T> _Single_object;
+    };
 
-template<class _Ty> struct _Unique_if {
-    typedef unique_ptr<_Ty> _Single_object;
-};
+    template<class T> struct _Unique_if<T[]> {
+        typedef unique_ptr<T[]> _Unknown_bound;
+    };
 
-template<class _Ty> struct _Unique_if<_Ty[]> {
-    typedef unique_ptr<_Ty[]> _Unknown_bound;
-};
+    template<class T, size_t N> struct _Unique_if<T[N]> {
+        typedef void _Known_bound;
+    };
 
-template<class _Ty, size_t N> struct _Unique_if<_Ty[N]> {
-    typedef void _Known_bound;
-};
+    template<class T, class... Args>
+    typename _Unique_if<T>::_Single_object
+    make_unique(Args&&... args) {
+        return unique_ptr<T>(new T(std::forward<Args>(args)...));
+    }
 
-template<class _Ty, class... Args>
-typename _Unique_if<_Ty>::_Single_object
-make_unique(Args&&... args) {
-    return unique_ptr<_Ty>(new _Ty(std::forward<Args>(args)...));
+    template<class T>
+    typename _Unique_if<T>::_Unknown_bound
+    make_unique(size_t n) {
+        typedef typename remove_extent<T>::type U;
+        return unique_ptr<T>(new U[n]());
+    }
+
+    template<class T, class... Args>
+    typename _Unique_if<T>::_Known_bound
+    make_unique(Args&&...) = delete;
 }
 
-template<class _Ty>
-typename _Unique_if<_Ty>::_Unknown_bound
-make_unique(size_t n) {
-    typedef typename remove_extent<_Ty>::type U;
-    return unique_ptr<_Ty>(new U[n]());
-}
-
-
-} // namespace std
-
-#endif // !COMPILER_SUPPORTS_MAKE_UNIQUE
-
+#endif //PLANTSIO_IVY_C14_H

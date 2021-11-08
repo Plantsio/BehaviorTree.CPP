@@ -17,8 +17,8 @@ enum NodeType : byte {
 }
 
 enum PortDirection : byte {
-    INPUT = 0,
-    OUTPUT,
+    BT_INPUT = 0,
+    BT_OUTPUT,
     INOUT
 }
 

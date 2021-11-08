@@ -565,11 +565,11 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
             if( port_it != manifest.ports.end() )
             {
                 auto direction = port_it->second.direction();
-                if( direction != PortDirection::OUTPUT )
+                if( direction != PortDirection::BT_OUTPUT )
                 {
                     config.input_ports.insert( remap_it );
                 }
-                if( direction != PortDirection::INPUT )
+                if( direction != PortDirection::BT_INPUT )
                 {
                     config.output_ports.insert( remap_it );
                 }
@@ -583,7 +583,7 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
             const PortInfo& port_info = port_it.second;
 
             auto direction = port_info.direction();
-            if( direction != PortDirection::OUTPUT &&
+            if( direction != PortDirection::BT_OUTPUT &&
                 config.input_ports.count(port_name) == 0 &&
                 port_info.defaultValue().empty() == false)
             {
@@ -795,8 +795,8 @@ std::string writeTreeNodesModelXML(const BehaviorTreeFactory& factory)
             XMLElement* port_element = nullptr;
             switch(  port_info.direction() )
             {
-                case PortDirection::INPUT:  port_element = doc.NewElement("input_port");  break;
-                case PortDirection::OUTPUT: port_element = doc.NewElement("output_port"); break;
+                case PortDirection::BT_INPUT: port_element = doc.NewElement("input_port");  break;
+                case PortDirection::BT_OUTPUT: port_element = doc.NewElement("output_port"); break;
                 case PortDirection::INOUT:  port_element = doc.NewElement("inout_port");  break;
             }
 

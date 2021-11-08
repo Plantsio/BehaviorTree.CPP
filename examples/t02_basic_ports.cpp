@@ -79,7 +79,7 @@ int main()
     factory.registerNodeType<SaySomething>("SaySomething");
 
 
-    // Similarly to SaySomething, ThinkWhatToSay has an OUTPUT port called "text"
+    // Similarly to SaySomething, ThinkWhatToSay has an BT_OUTPUT port called "text"
     // Both these ports are std::string, therefore they can connect to each other
     factory.registerNodeType<ThinkWhatToSay>("ThinkWhatToSay");
 
@@ -89,7 +89,7 @@ int main()
     PortsList say_something_ports = { InputPort<std::string>("message") };
     factory.registerSimpleAction("SaySomething2", SaySomethingSimple, say_something_ports );
 
-    /* An INPUT can be either a string, for instance:
+    /* An BT_INPUT can be either a string, for instance:
      *
      *     <SaySomething message="start thinking..." />
      *

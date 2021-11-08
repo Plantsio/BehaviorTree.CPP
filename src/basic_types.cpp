@@ -66,8 +66,8 @@ std::string toStr<PortDirection>(PortDirection direction)
 {
     switch(direction)
     {
-        case PortDirection::INPUT:  return "Input";
-        case PortDirection::OUTPUT: return "Output";
+        case PortDirection::BT_INPUT:  return "Input";
+        case PortDirection::BT_OUTPUT: return "Output";
         case PortDirection::INOUT:  return "InOut";
     }
     return "InOut";
@@ -231,8 +231,8 @@ NodeType convertFromString<NodeType>(StringView str)
 template <>
 PortDirection convertFromString<PortDirection>(StringView str)
 {
-    if( str == "Input"  || str == "INPUT" )    return PortDirection::INPUT;
-    if( str == "Output" || str == "OUTPUT")    return PortDirection::OUTPUT;
+    if( str == "Input"  || str == "BT_INPUT" )    return PortDirection::BT_INPUT;
+    if( str == "Output" || str == "BT_OUTPUT")    return PortDirection::BT_OUTPUT;
     return PortDirection::INOUT;
 }
 

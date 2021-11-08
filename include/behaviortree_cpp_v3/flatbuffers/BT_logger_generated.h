@@ -109,17 +109,17 @@ inline const char *EnumNameNodeType(NodeType e) {
 }
 
 enum class PortDirection : int8_t {
-  INPUT = 0,
-  OUTPUT = 1,
+  BT_INPUT = 0,
+  BT_OUTPUT = 1,
   INOUT = 2,
-  MIN = INPUT,
+  MIN = BT_INPUT,
   MAX = INOUT
 };
 
 inline const PortDirection (&EnumValuesPortDirection())[3] {
   static const PortDirection values[] = {
-    PortDirection::INPUT,
-    PortDirection::OUTPUT,
+    PortDirection::BT_INPUT,
+    PortDirection::BT_OUTPUT,
     PortDirection::INOUT
   };
   return values;
@@ -127,8 +127,8 @@ inline const PortDirection (&EnumValuesPortDirection())[3] {
 
 inline const char * const *EnumNamesPortDirection() {
   static const char * const names[4] = {
-    "INPUT",
-    "OUTPUT",
+    "BT_INPUT",
+    "BT_OUTPUT",
     "INOUT",
     nullptr
   };
@@ -136,7 +136,7 @@ inline const char * const *EnumNamesPortDirection() {
 }
 
 inline const char *EnumNamePortDirection(PortDirection e) {
-  if (flatbuffers::IsOutRange(e, PortDirection::INPUT, PortDirection::INOUT)) return "";
+  if (flatbuffers::IsOutRange(e, PortDirection::BT_INPUT, PortDirection::INOUT)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesPortDirection()[index];
 }
@@ -261,7 +261,7 @@ struct PortModelBuilder {
 inline flatbuffers::Offset<PortModel> CreatePortModel(
     flatbuffers::FlatBufferBuilder &_fbb,
     flatbuffers::Offset<flatbuffers::String> port_name = 0,
-    Serialization::PortDirection direction = Serialization::PortDirection::INPUT,
+    Serialization::PortDirection direction = Serialization::PortDirection::BT_INPUT,
     flatbuffers::Offset<flatbuffers::String> type_info = 0,
     flatbuffers::Offset<flatbuffers::String> description = 0) {
   PortModelBuilder builder_(_fbb);
@@ -275,7 +275,7 @@ inline flatbuffers::Offset<PortModel> CreatePortModel(
 inline flatbuffers::Offset<PortModel> CreatePortModelDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     const char *port_name = nullptr,
-    Serialization::PortDirection direction = Serialization::PortDirection::INPUT,
+    Serialization::PortDirection direction = Serialization::PortDirection::BT_INPUT,
     const char *type_info = nullptr,
     const char *description = nullptr) {
   auto port_name__ = port_name ? _fbb.CreateString(port_name) : 0;
