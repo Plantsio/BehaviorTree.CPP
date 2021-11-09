@@ -4,8 +4,9 @@
 
 #include "depend/BehaviorTree.CPP/include/behaviortree_cpp_v3/controls/RandomFallback.h"
 #include "behaviortree_cpp_v3/action_node.h"
+#if Ivy
 #include "esp_random.h"
-
+#endif
 RandomFallback::RandomFallback(const std::string &name)
         : ControlNode::ControlNode(name, {}) {
     setRegistrationID("RandomFallback");
@@ -41,10 +42,14 @@ BT::NodeStatus RandomFallback::tick() {
 
 uint32_t RandomFallback::generate_random_index() {
     const size_t children_count = children_nodes_.size();
+    #if Ivy
     uint32_t rng = esp_random();
     uint32_t index = (uint32_t) ((double) rng / UINT32_MAX * (double) children_count);
     index = std::min(children_count, index);
     return index;
+    #else
+    return 0;
+    #endif
 }
 
 void RandomFallback::halt()
