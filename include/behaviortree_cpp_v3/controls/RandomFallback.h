@@ -1,0 +1,29 @@
+//
+// Created by Gordon on 2021/11/9.
+//
+
+#ifndef PLANTSIO_IVY_RANDOMFALLBACK_H
+#define PLANTSIO_IVY_RANDOMFALLBACK_H
+
+
+#include "behaviortree_cpp_v3/control_node.h"
+
+class RandomFallback : public BT::ControlNode {
+  public:
+    RandomFallback(const std::string& name);
+
+    virtual ~RandomFallback() override = default;
+
+    virtual void halt() override;
+
+  private:
+    size_t current_child_idx_;
+
+    virtual BT::NodeStatus tick() override;
+
+    uint32_t generate_random_index();
+
+};
+
+
+#endif //PLANTSIO_IVY_RANDOMFALLBACK_H

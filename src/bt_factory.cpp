@@ -31,6 +31,7 @@ BehaviorTreeFactory::BehaviorTreeFactory()
     registerNodeType<ReactiveFallback>("ReactiveFallback");
     registerNodeType<IfThenElseNode>("IfThenElse");
     registerNodeType<ReactiveIfThenElse>("ReactiveIfThenElse");
+    registerNodeType<RandomFallback>("RandomFallback");
     registerNodeType<WhileDoElseNode>("WhileDoElse");
 
     registerNodeType<InverterNode>("Inverter");
