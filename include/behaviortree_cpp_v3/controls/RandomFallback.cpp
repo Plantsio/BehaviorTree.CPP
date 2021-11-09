@@ -46,3 +46,9 @@ uint32_t RandomFallback::generate_random_index() {
     index = std::min(children_count, index);
     return index;
 }
+
+void RandomFallback::halt()
+{
+    current_child_idx_ = generate_random_index();
+    ControlNode::halt();
+}
