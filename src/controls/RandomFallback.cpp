@@ -2,7 +2,7 @@
 // Created by Gordon on 2021/11/9.
 //
 
-#include "depend/BehaviorTree.CPP/include/behaviortree_cpp_v3/controls/RandomFallback.h"
+#include "behaviortree_cpp_v3/controls/RandomFallback.h"
 #include "behaviortree_cpp_v3/action_node.h"
 #if Ivy
 #include "esp_random.h"
@@ -41,7 +41,7 @@ BT::NodeStatus RandomFallback::tick() {
 }
 
 uint32_t RandomFallback::generate_random_index() {
-    const size_t children_count = children_nodes_.size();
+    const uint32_t children_count = children_nodes_.size();
     #if Ivy
     uint32_t rng = esp_random();
     uint32_t index = (uint32_t) ((double) rng / UINT32_MAX * (double) children_count);
