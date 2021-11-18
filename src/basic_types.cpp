@@ -68,7 +68,7 @@ std::string toStr<PortDirection>(PortDirection direction)
     {
         case PortDirection::BT_INPUT:  return "Input";
         case PortDirection::BT_OUTPUT: return "Output";
-        case PortDirection::INOUT:  return "InOut";
+        case PortDirection::BT_INOUT:  return "InOut";
     }
     return "InOut";
 }
@@ -233,7 +233,7 @@ PortDirection convertFromString<PortDirection>(StringView str)
 {
     if( str == "Input"  || str == "BT_INPUT" )    return PortDirection::BT_INPUT;
     if( str == "Output" || str == "BT_OUTPUT")    return PortDirection::BT_OUTPUT;
-    return PortDirection::INOUT;
+    return PortDirection::BT_INOUT;
 }
 
 

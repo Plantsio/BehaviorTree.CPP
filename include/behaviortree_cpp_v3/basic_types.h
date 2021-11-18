@@ -43,7 +43,7 @@ enum class NodeStatus
 enum class PortDirection{
     BT_INPUT,
     BT_OUTPUT,
-    INOUT
+    BT_INOUT
 };
 
 
@@ -213,7 +213,7 @@ class PortInfo
 {
 
 public:
-  PortInfo( PortDirection direction = PortDirection::INOUT  ):
+  PortInfo( PortDirection direction = PortDirection::BT_INOUT  ):
         _type(direction), _info(nullptr) {}
 
     PortInfo( PortDirection direction,
@@ -294,7 +294,7 @@ std::pair<std::string,PortInfo> OutputPort(StringView name, StringView descripti
 template <typename T = void> inline
     std::pair<std::string,PortInfo> BidirectionalPort(StringView name, StringView description = {})
 {
-    return CreatePort<T>(PortDirection::INOUT, name, description );
+    return CreatePort<T>(PortDirection::BT_INOUT, name, description );
 }
 //----------
 template <typename T = void> inline
@@ -308,7 +308,7 @@ template <typename T = void> inline
 template <typename T = void> inline
     std::pair<std::string,PortInfo> BidirectionalPort(StringView name, const T& default_value, StringView description)
 {
-    auto out = CreatePort<T>(PortDirection::INOUT, name, description );
+    auto out = CreatePort<T>(PortDirection::BT_INOUT, name, description );
     out.second.setDefaultValue( BT::toStr(default_value) );
     return out;
 }

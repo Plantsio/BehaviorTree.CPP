@@ -797,7 +797,7 @@ std::string writeTreeNodesModelXML(const BehaviorTreeFactory& factory)
             {
                 case PortDirection::BT_INPUT: port_element = doc.NewElement("input_port");  break;
                 case PortDirection::BT_OUTPUT: port_element = doc.NewElement("output_port"); break;
-                case PortDirection::INOUT:  port_element = doc.NewElement("inout_port");  break;
+                case PortDirection::BT_INOUT: port_element = doc.NewElement("inout_port");  break;
             }
 
             port_element->SetAttribute("name", port_name.c_str() );

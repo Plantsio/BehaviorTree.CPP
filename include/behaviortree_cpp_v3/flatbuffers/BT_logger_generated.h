@@ -129,7 +129,7 @@ inline const char * const *EnumNamesPortDirection() {
   static const char * const names[4] = {
     "BT_INPUT",
     "BT_OUTPUT",
-    "INOUT",
+    "BT_INOUT",
     nullptr
   };
   return names;
