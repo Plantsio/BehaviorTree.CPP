@@ -53,7 +53,7 @@ inline Serialization::PortDirection convertToFlatbuffers(BT::PortDirection direc
             return Serialization::PortDirection::BT_INPUT;
         case BT::PortDirection::BT_OUTPUT:
             return Serialization::PortDirection::BT_OUTPUT;
-        case BT::PortDirection::INOUT:
+        case BT::PortDirection::BT_INOUT:
             return Serialization::PortDirection::INOUT;
     }
     return Serialization::PortDirection::INOUT;

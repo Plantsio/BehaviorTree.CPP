@@ -19,7 +19,7 @@ enum NodeType : byte {
 enum PortDirection : byte {
     BT_INPUT = 0,
     BT_OUTPUT,
-    INOUT
+    BT_INOUT
 }
 
 table PortModel
