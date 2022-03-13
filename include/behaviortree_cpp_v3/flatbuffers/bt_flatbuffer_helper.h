@@ -54,9 +54,9 @@ inline Serialization::PortDirection convertToFlatbuffers(BT::PortDirection direc
         case BT::PortDirection::BT_OUTPUT:
             return Serialization::PortDirection::BT_OUTPUT;
         case BT::PortDirection::BT_INOUT:
-            return Serialization::PortDirection::INOUT;
+            return Serialization::PortDirection::BT_INOUT;
     }
-    return Serialization::PortDirection::INOUT;
+    return Serialization::PortDirection::BT_INOUT;
 }
 
 inline void CreateFlatbuffersBehaviorTree(flatbuffers::FlatBufferBuilder& builder,
