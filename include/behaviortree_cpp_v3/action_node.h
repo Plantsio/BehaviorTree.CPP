@@ -17,6 +17,8 @@
 #include <atomic>
 #include <thread>
 #include <future>
+#include <mutex>
+
 #include "leaf_node.h"
 
 namespace BT
@@ -135,11 +137,12 @@ class AsyncActionNode : public ActionNodeBase
     std::exception_ptr exptr_;
     std::atomic_bool halt_requested_;
     std::future<NodeStatus> thread_handle_;
+    std::mutex m_;
 };
 
 /**
- * @brief The ActionNode is the goto option for,
- * but it is actually much easier to use correctly.
+ * @brief The ActionNode is the prefered way to implement asynchronous Actions.
+ * It is actually easier to use correctly, when compared with AsyncAction
  *
  * It is particularly useful when your code contains a request-reply pattern,
  * i.e. when the actions sends an asychronous request, then checks periodically
