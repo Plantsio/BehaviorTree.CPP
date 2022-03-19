@@ -147,6 +147,7 @@ list(APPEND BT_SOURCE
     src/controls/if_then_else_node.cpp
     src/controls/RandomFallback.cpp
     src/controls/ReactiveIfThenElse.cpp
+    src/controls/ControlAnim.cpp
     src/controls/fallback_node.cpp
     src/controls/parallel_node.cpp
     src/controls/reactive_sequence.cpp

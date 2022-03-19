@@ -29,6 +29,7 @@ BehaviorTreeFactory::BehaviorTreeFactory()
     registerNodeType<ParallelNode>("Parallel");
     registerNodeType<ReactiveSequence>("ReactiveSequence");
     registerNodeType<ReactiveFallback>("ReactiveFallback");
+    registerNodeType<ControlAnim>("ControlAnim");
     registerNodeType<IfThenElseNode>("IfThenElse");
     registerNodeType<ReactiveIfThenElse>("ReactiveIfThenElse");
     registerNodeType<RandomFallback>("RandomFallback");

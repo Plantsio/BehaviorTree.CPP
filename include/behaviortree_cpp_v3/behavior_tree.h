@@ -17,6 +17,7 @@
 #include "behaviortree_cpp_v3/controls/parallel_node.h"
 #include "behaviortree_cpp_v3/controls/reactive_sequence.h"
 #include "behaviortree_cpp_v3/controls/reactive_fallback.h"
+#include "behaviortree_cpp_v3/controls/ControlAnim.h"
 #include "behaviortree_cpp_v3/controls/fallback_node.h"
 #include "behaviortree_cpp_v3/controls/sequence_node.h"
 #include "behaviortree_cpp_v3/controls/sequence_star_node.h"

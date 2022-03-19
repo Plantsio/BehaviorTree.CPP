@@ -5,8 +5,7 @@
 #ifndef PLANTSIO_IVY_CONTROLANIM_H
 #define PLANTSIO_IVY_CONTROLANIM_H
 
-#include "behaviortree_cpp_v3/behavior_tree.h"
-#include "behaviortree_cpp_v3/bt_factory.h"
+#include "behaviortree_cpp_v3/control_node.h"
 
 #define ANIMATION_CONTROL_PRIORITY "priority"
 #define ANIMATION_NODE_N "n"

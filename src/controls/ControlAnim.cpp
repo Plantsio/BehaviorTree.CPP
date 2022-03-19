@@ -3,6 +3,7 @@
 //
 
 #include "behaviortree_cpp_v3/controls/ControlAnim.h"
+#ifdef Ivy
 #include "Anim/drivers/EmoDriver.h"
 
 BT::NodeStatus BT::ControlAnim::onStart() {
@@ -21,13 +22,13 @@ BT::NodeStatus BT::ControlAnim::onStart() {
     }
 }
 
-//BT::NodeStatus BT::AnimationNode::onRunning() {
-//    return status();
-//}
+#else
+BT::NodeStatus BT::ControlAnim::onStart(){
+    return NodeStatus::RUNNING;
+}
+#endif
 
 void BT::ControlAnim::onHalted() {
-    log_d("debug-bt halt");
-
 }
 
 BT::NodeStatus BT::ControlAnim::tick() {
