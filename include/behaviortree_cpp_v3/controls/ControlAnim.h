@@ -11,8 +11,9 @@
 #define ANIMATION_CONTROL_PRIORITY "priority"
 #define ANIMATION_NODE_N "n"
 
+#ifdef Ivy
 #include "Anim/Anim.h"
-
+#endif
 namespace BT {
     class ControlAnim : public ControlNode {
     public:
@@ -27,7 +28,7 @@ namespace BT {
         void halt() override;
 
     private:
-
+#ifdef Ivy
         void set_status(Anim::anim_complete_ret t_status) {
             if (t_status == Anim::success) {
                 setStatus(NodeStatus::SUCCESS);
@@ -35,7 +36,7 @@ namespace BT {
                 setStatus(NodeStatus::FAILURE);
             }
         }
-
+#endif
         NodeStatus onStart();
 
 //        NodeStatus onRunning();
