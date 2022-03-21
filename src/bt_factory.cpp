@@ -32,6 +32,7 @@ BehaviorTreeFactory::BehaviorTreeFactory()
     registerNodeType<ControlAnim>("ControlAnim");
     registerNodeType<IfThenElseNode>("IfThenElse");
     registerNodeType<ReactiveIfThenElse>("ReactiveIfThenElse");
+    registerNodeType<Dispatcher>("Dispatcher");
     registerNodeType<RandomFallback>("RandomFallback");
     registerNodeType<WhileDoElseNode>("WhileDoElse");
 
@@ -42,6 +43,7 @@ BehaviorTreeFactory::BehaviorTreeFactory()
     registerNodeType<RepeatNode>("Repeat");
     registerNodeType<TimeoutNode<>>("Timeout");
     registerNodeType<DelayNode>("Delay");
+    registerNodeType<DecoratorEvent>("Event");
 
     registerNodeType<ForceSuccessNode>("ForceSuccess");
     registerNodeType<ForceFailureNode>("ForceFailure");

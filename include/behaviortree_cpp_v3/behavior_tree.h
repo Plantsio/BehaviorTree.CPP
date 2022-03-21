@@ -25,6 +25,7 @@
 #include "behaviortree_cpp_v3/controls/manual_node.h"
 #include "behaviortree_cpp_v3/controls/if_then_else_node.h"
 #include "behaviortree_cpp_v3/controls/ReactiveIfThenElse.h"
+#include "behaviortree_cpp_v3/controls/Dispatcher.h"
 #include "behaviortree_cpp_v3/controls/RandomFallback.h"
 #include "behaviortree_cpp_v3/controls/while_do_else_node.h"
 
@@ -35,6 +36,7 @@
 #include "behaviortree_cpp_v3/decorators/retry_node.h"
 #include "behaviortree_cpp_v3/decorators/repeat_node.h"
 #include "behaviortree_cpp_v3/decorators/subtree_node.h"
+#include "behaviortree_cpp_v3/decorators/DecoratorEvent.h"
 
 #include "behaviortree_cpp_v3/actions/always_success_node.h"
 #include "behaviortree_cpp_v3/actions/always_failure_node.h"

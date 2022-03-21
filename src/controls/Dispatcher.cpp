@@ -2,13 +2,12 @@
 // Created by sungaoran on 2022/3/20.
 //
 
-#include "BehaviorTree/include/behaviortree_cpp_v3/controls/Dispatcher.h"
-
+#include "behaviortree_cpp_v3/controls/Dispatcher.h"
+namespace BT {
 #ifdef Ivy
-
 #include "Engine/Behavior/EventDispatcher.h"
 
-namespace BT {
+
     Dispatcher::Dispatcher(const std::string &name) : ControlNode(name, {}) {
         setRegistrationID("Dispatcher");
         EventDispatcher::instance().set_bt_dispatcher(this);

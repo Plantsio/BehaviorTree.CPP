@@ -2,9 +2,7 @@
 // Created by sungaoran on 2022/3/20.
 //
 
-#include "BehaviorTree/include/behaviortree_cpp_v3/decorators/DecoratorEvent.h"
-#include "Arduino.h"
-#include "Engine/Behavior/EventDispatcher.h"
+#include "behaviortree_cpp_v3/decorators/DecoratorEvent.h"
 
 namespace BT {
     NodeStatus DecoratorEvent::tick() {

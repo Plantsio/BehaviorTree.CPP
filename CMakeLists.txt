@@ -143,10 +143,12 @@ list(APPEND BT_SOURCE
     src/decorators/retry_node.cpp
     src/decorators/subtree_node.cpp
     src/decorators/delay_node.cpp
+    src/decorators/DecoratorEvent.cpp
 
     src/controls/if_then_else_node.cpp
     src/controls/RandomFallback.cpp
     src/controls/ReactiveIfThenElse.cpp
+    src/controls/Dispatcher.cpp
     src/controls/ControlAnim.cpp
     src/controls/fallback_node.cpp
     src/controls/parallel_node.cpp
