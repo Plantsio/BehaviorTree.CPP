@@ -35,6 +35,8 @@ namespace BT {
                 setStatus(NodeStatus::FAILURE);
             }
         }
+
+        Anim anim = Anim({},1,[this](Anim::anim_complete_ret ret){this->set_status(ret);});
 #endif
         NodeStatus onStart();
 

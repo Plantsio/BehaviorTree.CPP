@@ -149,7 +149,7 @@ class AsyncActionNode : public ActionNodeBase
  * if the reply has been received and, eventually, analyze the reply to determine
  * if the result is SUCCESS or FAILURE.
  *
- * -) an action that was in IDLE state will call onStart()
+ * -) an action that was in IDLE state will call on_init()
  *
  * -) A RUNNING action will call onRunning()
  *

@@ -41,10 +41,11 @@ namespace BT {
         }
 
     private:
-
         NodeStatus tick() override;
 
-        NodeStatus onStart();
+        NodeStatus on_init();
+
+        bool m_initialized = false;
 
         std::map<event_t, TreeNode *> m_map;
 

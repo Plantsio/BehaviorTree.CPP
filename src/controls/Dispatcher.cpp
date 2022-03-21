@@ -21,12 +21,10 @@ namespace BT {
     }
 
     NodeStatus Dispatcher::tick() {
-        const NodeStatus initial_status = status();
-
-        if (initial_status == NodeStatus::IDLE) {
-            NodeStatus new_status = onStart();
-            log_d("debug-bt start status: %d | init: %d", new_status, initial_status);
-            setStatus(new_status);
+        if (!m_initialized) {
+            m_initialized = true;
+            NodeStatus new_status = on_init();
+            return new_status;
         }
 
         NodeStatus _status;
@@ -49,19 +47,14 @@ namespace BT {
             /* no active events */
             _status = NodeStatus::FAILURE;
         }
-        if (_status == NodeStatus::IDLE) {
-            log_e("debug-bt invalid status IDLE");
-            _status = NodeStatus::FAILURE;
-        } else if (_status != NodeStatus::RUNNING) {
+        if (_status != NodeStatus::RUNNING) {
             /* unset current child if not running */
             m_current_child_index = invalid;
         }
-        log_d("debug-bt dispatcher node status set to %d", _status);
         return _status;
     }
 
-    NodeStatus Dispatcher::onStart() {
-        log_d("debug-bt Dispatcher onStart");
+    NodeStatus Dispatcher::on_init() {
         for (auto child: children_nodes_) {
             try {
                 auto index = (event_t) std::stoi(child->name());
@@ -70,7 +63,6 @@ namespace BT {
                 log_w("invalid event index %s during creation", child->name().c_str());
             }
         }
-
         return NodeStatus::SUCCESS;
     }
 
