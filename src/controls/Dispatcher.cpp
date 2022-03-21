@@ -5,7 +5,9 @@
 #include "behaviortree_cpp_v3/controls/Dispatcher.h"
 
 #ifdef Ivy
+
 #include "Engine/Behavior/EventDispatcher.h"
+
 namespace BT {
 
     Dispatcher::Dispatcher(const std::string &name) : ControlNode(name, {}) {
@@ -23,7 +25,8 @@ namespace BT {
 
         if (initial_status == NodeStatus::IDLE) {
             NodeStatus new_status = onStart();
-            return new_status;
+            log_d("debug-bt start status: %d | init: %d", new_status, initial_status);
+            setStatus(new_status);
         }
 
         NodeStatus _status;
@@ -46,14 +49,19 @@ namespace BT {
             /* no active events */
             _status = NodeStatus::FAILURE;
         }
-        if (_status != NodeStatus::RUNNING){
-            /* unset current child if not runnning */
+        if (_status == NodeStatus::IDLE) {
+            log_e("debug-bt invalid status IDLE");
+            _status = NodeStatus::FAILURE;
+        } else if (_status != NodeStatus::RUNNING) {
+            /* unset current child if not running */
             m_current_child_index = invalid;
         }
+        log_d("debug-bt dispatcher node status set to %d", _status);
         return _status;
     }
 
     NodeStatus Dispatcher::onStart() {
+        log_d("debug-bt Dispatcher onStart");
         for (auto child: children_nodes_) {
             try {
                 auto index = (event_t) std::stoi(child->name());
@@ -67,21 +75,21 @@ namespace BT {
     }
 
 #else
-namespace BT {
-    Dispatcher::Dispatcher(const std::string &name) : ControlNode(name, {}) {
-        setRegistrationID("Dispatcher");
-    }
+    namespace BT {
+        Dispatcher::Dispatcher(const std::string &name) : ControlNode(name, {}) {
+            setRegistrationID("Dispatcher");
+        }
 
-    Dispatcher::~Dispatcher() {
-    }
+        Dispatcher::~Dispatcher() {
+        }
 
-    NodeStatus Dispatcher::tick() {
-        return NodeStatus::SUCCESS;
-    }
+        NodeStatus Dispatcher::tick() {
+            return NodeStatus::SUCCESS;
+        }
 
-    NodeStatus Dispatcher::onStart() {
-        return NodeStatus::SUCCESS;
-    }
+        NodeStatus Dispatcher::onStart() {
+            return NodeStatus::SUCCESS;
+        }
 
 #endif
 }
