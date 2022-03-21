@@ -3,10 +3,10 @@
 //
 
 #include "behaviortree_cpp_v3/controls/Dispatcher.h"
-namespace BT {
+
 #ifdef Ivy
 #include "Engine/Behavior/EventDispatcher.h"
-
+namespace BT {
 
     Dispatcher::Dispatcher(const std::string &name) : ControlNode(name, {}) {
         setRegistrationID("Dispatcher");
@@ -50,7 +50,7 @@ namespace BT {
             /* unset current child if not runnning */
             m_current_child_index = invalid;
         }
-
+        return _status;
     }
 
     NodeStatus Dispatcher::onStart() {
@@ -67,6 +67,7 @@ namespace BT {
     }
 
 #else
+namespace BT {
     Dispatcher::Dispatcher(const std::string &name) : ControlNode(name, {}) {
         setRegistrationID("Dispatcher");
     }
