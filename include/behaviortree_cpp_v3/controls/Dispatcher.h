@@ -12,18 +12,35 @@
 namespace BT {
     class Dispatcher : public ControlNode {
     public:
-        explicit Dispatcher(const std::string &name) : ControlNode(name, {}) {
-            setRegistrationID("Dispatcher");
+        explicit Dispatcher(const std::string &name);
+
+        ~Dispatcher() override;
+
+        event_t get_current_index() const {
+            return m_current_child_index;
         }
 
         void set_current_index(event_t index) {
-            std::lock_guard<std::recursive_mutex> lock(m_mutex);
             m_current_child_index = index;
         }
 
+        TreeNode *get_current_evt() {
+            return get_evt_by_index(m_current_child_index);
+        }
+
+        TreeNode *get_evt_by_index(event_t index) {
+            if (index == invalid) {
+                return nullptr;
+            }
+            auto ret = m_map.find(index);
+            if (ret != m_map.end()) {
+                return ret->second;
+            } else {
+                return nullptr;
+            }
+        }
 
     private:
-        mutable std::recursive_mutex m_mutex;
 
         NodeStatus tick() override;
 

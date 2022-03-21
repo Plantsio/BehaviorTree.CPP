@@ -6,9 +6,16 @@
 #define PLANTSIO_IVY_CONFIG_H
 
 namespace BT {
+    /* note for reference and type check only (for now) */
+    /* todo generate enum selection on UI */
     typedef enum {
         invalid = -1,
-        idle_routine = 0,
+        blank_tick = 0,
+        idle_routine = 1,
+        touch_left = 2,
+        touch_right = 3,
+        touch_hug = 4,
+        touch_plant = 5,
     } event_t;
 }
 
