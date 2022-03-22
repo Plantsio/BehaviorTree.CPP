@@ -16,6 +16,11 @@ namespace BT {
         touch_right = 3,
         touch_hug = 4,
         touch_plant = 5,
+        pot_in = 6,
+        pot_out = 7,
+        knock = 8,
+        thump = 9,
+
     } event_t;
 }
 

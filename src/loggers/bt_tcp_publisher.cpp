@@ -29,7 +29,6 @@ namespace BT {
     }
 
     void PublisherTCP::callback(Duration timestamp, const TreeNode &node, NodeStatus prev_status, NodeStatus status) {
-        log_v("p-udp cb");
         SerializedTransition transition = SerializeTransition(node.UID(), timestamp, prev_status, status);
         if (m_subs.empty()) {
             /* there is no subscribers at the moment */
@@ -37,14 +36,14 @@ namespace BT {
         } else {
 //            std::unique_lock<std::mutex> lock(mutex_);
 //            m_transition = SerializeTransition(node.UID(), timestamp, prev_status, status);
-            std::lock_guard<std::mutex> lock(mutex_);
+            std::lock_guard<std::recursive_mutex> lock(mutex_);
             m_transition_buf.push_back(transition);
             /* one or more subscribers present */
-            if (millis() - m_last_flush_t > 1) {
-                /* todo time interval should not be the only metric for publish timing */
-                flush();
-                m_last_flush_t = millis();
-            }
+//            if (millis() - m_last_flush_t > 1) {
+//                /* note flush behavior is control*/
+//                flush();
+//                m_last_flush_t = millis();
+//            }
         }
     }
 
@@ -64,13 +63,23 @@ namespace BT {
         flatbuffers::WriteScalar<uint32_t>(&m_tcp_buf[index], m_transition_buf.size());
         index += 4;
 
-        for (auto &transition:m_transition_buf) {
-            std::copy(transition.begin(), transition.end(),m_tcp_buf.begin() + index);
+        for (auto &transition: m_transition_buf) {
+            std::copy(transition.begin(), transition.end(), m_tcp_buf.begin() + index);
             index += transition.size();
         }
         /* fixme grootIvy frequently receive bad header size */
-        send(m_tcp_buf.data(),m_tcp_buf.size());
+        send(m_tcp_buf.data(), m_tcp_buf.size());
         m_transition_buf.clear();
         createStatusBuffer();
+    }
+
+    void PublisherTCP::flush_if_subscribed() {
+        std::lock_guard<std::recursive_mutex> lock(mutex_);
+        if (m_subs.empty()) {
+            /* there is no subscribers at the moment */
+            return;
+        } else {
+            flush();
+        }
     }
 }

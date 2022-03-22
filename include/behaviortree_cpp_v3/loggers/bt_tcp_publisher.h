@@ -15,6 +15,8 @@ namespace BT {
     public:
         PublisherTCP(const BT::Tree &t_tree);
 
+        void flush_if_subscribed();
+
     private:
         virtual void callback(Duration timestamp, const TreeNode &node, NodeStatus prev_status,
                               NodeStatus status) override;
@@ -31,7 +33,7 @@ namespace BT {
 
         void createStatusBuffer();
 
-        std::mutex mutex_;
+        std::recursive_mutex mutex_;
     };
 }
 
