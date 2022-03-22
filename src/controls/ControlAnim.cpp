@@ -24,11 +24,6 @@ BT::NodeStatus BT::ControlAnim::onStart() {
     }
 }
 
-#else
-BT::NodeStatus BT::ControlAnim::onStart(){
-    return NodeStatus::RUNNING;
-}
-#endif
 
 void BT::ControlAnim::onHalted() {
     std::shared_ptr<Anim> a = anim.lock();
@@ -36,6 +31,17 @@ void BT::ControlAnim::onHalted() {
         a->set_complete(Anim::interrupted);
     }
 }
+
+#else
+
+BT::NodeStatus BT::ControlAnim::onStart() {
+    return NodeStatus::RUNNING;
+}
+
+void BT::ControlAnim::onHalted() {}
+
+#endif
+
 
 BT::NodeStatus BT::ControlAnim::tick() {
     const NodeStatus initial_status = status();
