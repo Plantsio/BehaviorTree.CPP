@@ -36,7 +36,7 @@ namespace BT {
         } else {
 //            std::unique_lock<std::mutex> lock(mutex_);
 //            m_transition = SerializeTransition(node.UID(), timestamp, prev_status, status);
-            std::lock_guard<std::recursive_mutex> lock(mutex_);
+            std::lock_guard<std::recursive_mutex> lock(m_mutex);
             m_transition_buf.push_back(transition);
             /* one or more subscribers present */
 //            if (millis() - m_last_flush_t > 1) {
@@ -74,7 +74,7 @@ namespace BT {
     }
 
     void PublisherTCP::flush_if_subscribed() {
-        std::lock_guard<std::recursive_mutex> lock(mutex_);
+        std::lock_guard<std::recursive_mutex> lock(m_mutex);
         if (m_subs.empty()) {
             /* there is no subscribers at the moment */
             return;

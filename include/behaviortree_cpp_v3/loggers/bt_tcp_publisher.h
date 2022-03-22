@@ -33,7 +33,7 @@ namespace BT {
 
         void createStatusBuffer();
 
-        std::recursive_mutex mutex_;
+        std::recursive_mutex m_mutex;
     };
 }
 
