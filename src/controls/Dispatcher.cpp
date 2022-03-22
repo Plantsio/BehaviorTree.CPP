@@ -79,7 +79,7 @@ namespace BT {
             return NodeStatus::SUCCESS;
         }
 
-        NodeStatus Dispatcher::onStart() {
+        NodeStatus Dispatcher::on_init() {
             return NodeStatus::SUCCESS;
         }
 

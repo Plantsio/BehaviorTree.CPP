@@ -16,7 +16,7 @@
 namespace BT {
     class ControlAnim : public ControlNode {
     public:
-        ControlAnim(const std::string &name, const NodeConfiguration &config) : ControlNode(name, config) {
+        explicit ControlAnim(const std::string &name) : ControlNode(name, {}) {
             setRegistrationID("ControlAnim");
         }
 
