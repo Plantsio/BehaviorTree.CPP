@@ -13,4 +13,9 @@ namespace BT {
         auto ret = getInput<int>(DECORATOR_PRIORITY_NAME);
         return ret.value();
     }
+
+    int DecoratorEvent::get_index() {
+        auto ret = getInput<int>(DECORATOR_INDEX_NAME);
+        return ret.value();
+    }
 }

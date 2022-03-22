@@ -9,6 +9,7 @@
 #include "behaviortree_cpp_v3/config.h"
 
 #define DECORATOR_PRIORITY_NAME     "priority"
+#define DECORATOR_INDEX_NAME     "index"
 
 namespace BT {
     class DecoratorEvent : public DecoratorNode {
@@ -16,12 +17,14 @@ namespace BT {
         DecoratorEvent(const std::string &name, const NodeConfiguration &config) : DecoratorNode(name, config) {}
 
         static PortsList providedPorts() {
-            return {InputPort<int>(DECORATOR_PRIORITY_NAME)};
+            return {InputPort<int>(DECORATOR_PRIORITY_NAME),InputPort<int>(DECORATOR_INDEX_NAME)};
         }
 
         NodeStatus tick() override;
 
         int get_priority();
+
+        int get_index();
     };
 }
 

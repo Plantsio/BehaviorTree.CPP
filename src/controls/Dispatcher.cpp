@@ -57,7 +57,8 @@ namespace BT {
     NodeStatus Dispatcher::on_init() {
         for (auto child: children_nodes_) {
             try {
-                auto index = (event_t) std::stoi(child->name());
+                auto index = (event_t) child->getInput<int>(DECORATOR_INDEX_NAME).value();
+//                auto index = (event_t) std::stoi(child->name());
                 m_map[index] = child;
             } catch (std::exception &e) {
                 log_w("invalid event index %s during creation", child->name().c_str());
