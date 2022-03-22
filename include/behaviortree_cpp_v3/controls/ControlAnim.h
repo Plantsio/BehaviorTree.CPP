@@ -20,10 +20,6 @@ namespace BT {
             setRegistrationID("ControlAnim");
         }
 
-        static PortsList providedPorts() {
-            return {InputPort<int>(ANIMATION_CONTROL_PRIORITY)};
-        }
-
         void halt() override;
 
     private:
@@ -36,11 +32,9 @@ namespace BT {
             }
         }
 
-        Anim anim = Anim({},1,[this](Anim::anim_complete_ret ret){this->set_status(ret);});
+        std::weak_ptr<Anim> anim;
 #endif
         NodeStatus onStart();
-
-//        NodeStatus onRunning();
 
         void onHalted();
 

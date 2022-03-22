@@ -9,15 +9,14 @@
 #include "Anim/drivers/EmoDriver.h"
 
 BT::NodeStatus BT::ControlAnim::onStart() {
-    auto priority = getInput<int>(ANIMATION_CONTROL_PRIORITY);
-//    Anim anim = Anim({},priority.value(),[this](Anim::anim_complete_ret ret){this->set_status(ret);});
-    anim = Anim({}, 1, [this](Anim::anim_complete_ret ret) { this->set_status(ret); });
+    auto a = Anim::create({}, [this](Anim::anim_complete_ret ret) { this->set_status(ret); });
     for (auto child: children()) {
         auto n = child->getInput<int>(ANIMATION_NODE_N);
-        anim.add_unit(AnimUnit(child->name(), n.value()));
-        log_d("debug-bt add %s | %d", child->name().c_str(), n.value());
+        a->add_unit(AnimUnit(child->name(), n.value()));
+        log_v("debug-bt add %s | %d", child->name().c_str(), n.value());
     }
-    bool ret = EmoDriver::instance().set_current_anim(anim);
+    anim = a;
+    bool ret = EmoDriver::instance().set_current_anim(a);
     if (ret) {
         return NodeStatus::RUNNING;
     } else {
@@ -32,8 +31,10 @@ BT::NodeStatus BT::ControlAnim::onStart(){
 #endif
 
 void BT::ControlAnim::onHalted() {
-    log_d("debug-bt halt");
-    anim.set_complete(Anim::interrupted);
+    std::shared_ptr<Anim> a = anim.lock();
+    if (a) {
+        a->set_complete(Anim::interrupted);
+    }
 }
 
 BT::NodeStatus BT::ControlAnim::tick() {
@@ -43,21 +44,7 @@ BT::NodeStatus BT::ControlAnim::tick() {
         NodeStatus new_status = onStart();
         return new_status;
     }
-    //------------------------------------------
-//    if( initial_status == NodeStatus::RUNNING )
-//    {
-//        NodeStatus new_status = onRunning();
-//        if( new_status == NodeStatus::IDLE)
-//        {
-//            throw std::logic_error("AsyncActionNode2::onRunning() must not return IDLE");
-//        }
-//        return new_status;
-//    }
-    //------------------------------------------
     return initial_status;
-
-
-    return BT::NodeStatus::SUCCESS;
 }
 
 
