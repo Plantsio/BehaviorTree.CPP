@@ -5,8 +5,9 @@
 #ifndef PLANTSIO_IVY_CONFIG_H
 #define PLANTSIO_IVY_CONFIG_H
 
-#define BT_VALUE_INPUT_NAME     "in"
+#define BT_VALUE_INPUT_NAME     "value"
 #define BT_VALUE_TARGET_NAME    "to"
+#define BT_CONDITION_NAME       "condition"
 
 namespace BT {
     /* note for reference and type check only (for now) */
@@ -43,6 +44,12 @@ namespace BT {
         battery = 5,            /* 电量 */
         soil_moisture = 6,      /* 土壤湿度 */
     } value_t;
+
+    /* get Ivy conditions */
+    bool get_condition(condition_t condition);
+
+    /* get Ivy properties or params */
+    bool get_value(value_t index, double &value);
 }
 
 #endif //PLANTSIO_IVY_CONFIG_H
