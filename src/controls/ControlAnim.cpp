@@ -51,6 +51,7 @@ BT::NodeStatus BT::ControlAnim::tick() {
 
     if (initial_status == NodeStatus::IDLE) {
         NodeStatus new_status = onStart();
+        setStatus(new_status);
         return new_status;
     }
     return initial_status;
@@ -61,5 +62,5 @@ void BT::ControlAnim::halt() {
     if (status() == NodeStatus::RUNNING) {
         onHalted();
     }
-    setStatus(NodeStatus::IDLE);
+    ControlNode::halt();
 }

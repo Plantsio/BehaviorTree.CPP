@@ -50,6 +50,7 @@ namespace BT {
         if (_status != NodeStatus::RUNNING) {
             /* unset current child if not running */
             m_current_child_index = invalid;
+            haltChildren();
         }
         return _status;
     }

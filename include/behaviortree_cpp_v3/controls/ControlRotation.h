@@ -11,29 +11,36 @@ namespace BT {
     class ControlRotation : public ControlNode {
     public:
         explicit ControlRotation(const std::string &name) : ControlNode(name, {}) {
-            setRegistrationID("ControlAnim");
         }
 
         NodeStatus tick() override {
-            const size_t children_count = children_nodes_.size();
-
-            setStatus(NodeStatus::RUNNING);
-
             TreeNode *current_child_node = children_nodes_[current_child_idx_];
             const NodeStatus child_status = current_child_node->executeTick();
             if (child_status != NodeStatus::RUNNING) {
-                current_child_idx_++;
-            }
-            if (current_child_idx_ == children_count) {
-                current_child_idx_ = 0;
+                advance();
+                haltChildren();
             }
             return child_status;
         }
 
+        void halt() override {
+            if (status() == NodeStatus::RUNNING) {
+                advance();
+            }
+            ControlNode::halt();
+        }
+
 
     private:
-        size_t current_child_idx_;
+        size_t current_child_idx_ = 0;
 
+        void advance() {
+            log_d("debug-bt rotation advance");
+            current_child_idx_++;
+            if (current_child_idx_ == children_nodes_.size()) {
+                current_child_idx_ = 0;
+            }
+        }
     };
 }
 

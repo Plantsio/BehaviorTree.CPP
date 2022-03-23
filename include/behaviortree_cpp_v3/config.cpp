@@ -10,7 +10,7 @@
 #include "Engine/Public.h"
 #include "Body/Skin.h"
 #include "Anim/IvyAnim.h"
-#include "Anim/drivers/EmoDriver.h"
+#include "Engine/Behavior/EventDispatcher.h"
 
 #endif
 
@@ -86,7 +86,8 @@ namespace BT {
 
     std::string get_current_anim_name() {
 #ifdef Ivy
-        return EmoDriver::instance().get_current_anim_unit_name();
+//        return EmoDriver::instance().get_current_anim_unit_name();
+        return EventDispatcher::instance().get_interrupted_anim_name();
 #else
         return "";
 #endif
