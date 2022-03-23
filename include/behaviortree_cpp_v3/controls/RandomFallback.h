@@ -9,19 +9,19 @@
 #include "behaviortree_cpp_v3/control_node.h"
 
 class RandomFallback : public BT::ControlNode {
-  public:
-    RandomFallback(const std::string& name);
+public:
+    RandomFallback(const std::string &name);
 
     virtual ~RandomFallback() override = default;
 
     virtual void halt() override;
 
-  private:
-    size_t current_child_idx_;
-
     virtual BT::NodeStatus tick() override;
 
-    uint32_t generate_random_index();
+private:
+    size_t current_child_idx_;
+
+    int generate_random_index();
 
 };
 

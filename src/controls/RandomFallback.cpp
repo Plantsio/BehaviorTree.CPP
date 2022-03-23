@@ -5,7 +5,7 @@
 #include "behaviortree_cpp_v3/controls/RandomFallback.h"
 #include "behaviortree_cpp_v3/action_node.h"
 #if Ivy
-#include "esp_random.h"
+#include "Arduino.h"
 #endif
 RandomFallback::RandomFallback(const std::string &name)
         : ControlNode::ControlNode(name, {}) {
@@ -17,36 +17,40 @@ BT::NodeStatus RandomFallback::tick() {
     setStatus(BT::NodeStatus::RUNNING);
     TreeNode *current_child_node = children_nodes_[current_child_idx_];
     const BT::NodeStatus child_status = current_child_node->executeTick();
-
-    switch (child_status) {
-        case BT::NodeStatus::RUNNING: {
-            return child_status;
-        }
-        case BT::NodeStatus::SUCCESS: {
-            haltChildren();
-            current_child_idx_ = generate_random_index();
-            return child_status;
-        }
-        case BT::NodeStatus::FAILURE: {
-            current_child_idx_ = generate_random_index();
-        }
-            break;
-
-        case BT::NodeStatus::IDLE: {
-            throw BT::LogicError("A child node must never return IDLE");
-        }
-    }   // end switch
-
-    return BT::NodeStatus::FAILURE;
+    if (child_status != BT::NodeStatus::RUNNING){
+        current_child_idx_ = generate_random_index();
+    }
+    return child_status;
+//    switch (child_status) {
+//        case BT::NodeStatus::RUNNING: {
+//            return child_status;
+//        }
+//        case BT::NodeStatus::SUCCESS: {
+//            haltChildren();
+//            current_child_idx_ = generate_random_index();
+//            return child_status;
+//        }
+//        case BT::NodeStatus::FAILURE: {
+//            current_child_idx_ = generate_random_index();
+//        }
+//            break;
+//
+//        case BT::NodeStatus::IDLE: {
+//            throw BT::LogicError("A child node must never return IDLE");
+//        }
+//    }   // end switch
+//
+//    return BT::NodeStatus::FAILURE;
 }
 
-uint32_t RandomFallback::generate_random_index() {
+int RandomFallback::generate_random_index() {
     const uint32_t children_count = children_nodes_.size();
     #if Ivy
-    uint32_t rng = esp_random();
-    uint32_t index = (uint32_t) ((double) rng / UINT32_MAX * (double) children_count);
-    index = std::min(children_count, index);
-    return index;
+    return random(childrenCount());
+//    uint32_t rng = esp_random();
+//    uint32_t index = (uint32_t) ((double) rng / UINT32_MAX * (double) children_count);
+//    index = std::min(children_count, index);
+//    return index;
     #else
     return 0;
     #endif
