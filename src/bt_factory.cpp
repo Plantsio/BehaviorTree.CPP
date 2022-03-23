@@ -43,14 +43,7 @@ BehaviorTreeFactory::BehaviorTreeFactory()
     registerNodeType<RepeatNode>("Repeat");
     registerNodeType<TimeoutNode<>>("Timeout");
     registerNodeType<DelayNode>("Delay");
-    NodeBuilder event_builder = [](const std::string &name, const NodeConfiguration &config) {
-        return std::make_unique<DecoratorEvent>(name, config, false);
-    };
-    NodeBuilder r_event_builder = [](const std::string &name, const NodeConfiguration &config) {
-        return std::make_unique<DecoratorEvent>(name, config, true);
-    };
-    registerBuilder<DecoratorEvent>("Event",event_builder);
-    registerBuilder<DecoratorEvent>("R-Event",r_event_builder);
+    registerNodeType<DecoratorEvent>("Event");
 
     registerNodeType<ForceSuccessNode>("ForceSuccess");
     registerNodeType<ForceFailureNode>("ForceFailure");

@@ -14,9 +14,8 @@
 namespace BT {
     class DecoratorEvent : public DecoratorNode {
     public:
-        DecoratorEvent(const std::string &name, const NodeConfiguration &config, bool t_reenter)
-                : DecoratorNode(name, config),
-                  m_reenter(t_reenter) {}
+        DecoratorEvent(const std::string &name, const NodeConfiguration &config)
+                : DecoratorNode(name, config){}
 
         static PortsList providedPorts() {
             return {InputPort<int>(DECORATOR_PRIORITY_NAME), InputPort<int>(DECORATOR_INDEX_NAME)};
