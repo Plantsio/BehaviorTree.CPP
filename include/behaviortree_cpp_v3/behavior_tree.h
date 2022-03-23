@@ -28,6 +28,7 @@
 #include "behaviortree_cpp_v3/controls/Dispatcher.h"
 #include "behaviortree_cpp_v3/controls/RandomFallback.h"
 #include "behaviortree_cpp_v3/controls/while_do_else_node.h"
+#include "behaviortree_cpp_v3/controls/ControlRotation.h"
 
 #include "behaviortree_cpp_v3/action_node.h"
 #include "behaviortree_cpp_v3/condition_node.h"

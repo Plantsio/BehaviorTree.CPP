@@ -35,6 +35,7 @@ BehaviorTreeFactory::BehaviorTreeFactory()
     registerNodeType<Dispatcher>("Dispatcher");
     registerNodeType<RandomFallback>("RandomFallback");
     registerNodeType<WhileDoElseNode>("WhileDoElse");
+    registerNodeType<ControlRotation>("Rotate");
 
     registerNodeType<InverterNode>("Inverter");
     //registerNodeType<RetryNodeTypo>("RetryUntilSuccesful"); //typo but back compatibility

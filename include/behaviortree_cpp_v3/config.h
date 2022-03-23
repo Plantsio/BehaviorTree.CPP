@@ -32,10 +32,10 @@ namespace BT {
         has_plant = 1,          /* 植物存在 */
         has_water = 2,          /* 水存在 */
         charging = 3,           /* 充电中 */
-        touching_left = 4,
-        touching_right = 5,
-        touching_plant = 6,
-        hugging = 7,
+        touching_left = 4,      /* 触摸左侧中 */
+        touching_right = 5,     /* 触摸右侧中 */
+        touching_plant = 6,     /* 触摸植物中 */
+        hugging = 7,            /* 抱住中 */
     } condition_t;
 
     typedef enum {

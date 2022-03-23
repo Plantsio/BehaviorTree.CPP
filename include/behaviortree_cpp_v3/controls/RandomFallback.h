@@ -10,9 +10,7 @@
 
 class RandomFallback : public BT::ControlNode {
 public:
-    RandomFallback(const std::string &name);
-
-    virtual ~RandomFallback() override = default;
+    explicit RandomFallback(const std::string &name);
 
     virtual void halt() override;
 
