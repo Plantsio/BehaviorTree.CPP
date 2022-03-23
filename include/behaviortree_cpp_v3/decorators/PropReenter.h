@@ -9,7 +9,12 @@
 
 namespace BT {
     class PropReenter : public DecoratorNode {
+    public:
         explicit PropReenter(const std::string &name) : DecoratorNode(name, {}) {}
+
+        NodeStatus tick() override {
+            return child()->executeTick();
+        }
     };
 }
 
