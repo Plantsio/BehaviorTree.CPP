@@ -44,6 +44,7 @@ BehaviorTreeFactory::BehaviorTreeFactory()
     registerNodeType<TimeoutNode<>>("Timeout");
     registerNodeType<DelayNode>("Delay");
     registerNodeType<DecoratorEvent>("Event");
+    registerNodeType<PropReenter>("Reenter");
 
     registerNodeType<ForceSuccessNode>("ForceSuccess");
     registerNodeType<ForceFailureNode>("ForceFailure");

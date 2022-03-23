@@ -31,8 +31,11 @@ namespace BT {
             return m_reenter;
         }
 
+        NodeStatus on_init();
+
     private:
         bool m_reenter = false;
+        bool m_initialized = false;
     };
 }
 

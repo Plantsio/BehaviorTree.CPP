@@ -24,7 +24,7 @@ namespace BT {
         if (!m_initialized) {
             m_initialized = true;
             NodeStatus new_status = on_init();
-            return new_status;
+//            return new_status;
         }
 
         NodeStatus _status;

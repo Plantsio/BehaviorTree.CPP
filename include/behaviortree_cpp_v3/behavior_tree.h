@@ -37,6 +37,7 @@
 #include "behaviortree_cpp_v3/decorators/repeat_node.h"
 #include "behaviortree_cpp_v3/decorators/subtree_node.h"
 #include "behaviortree_cpp_v3/decorators/DecoratorEvent.h"
+#include "behaviortree_cpp_v3/decorators/PropReenter.h"
 
 #include "behaviortree_cpp_v3/actions/always_success_node.h"
 #include "behaviortree_cpp_v3/actions/always_failure_node.h"
