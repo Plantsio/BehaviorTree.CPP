@@ -7,7 +7,7 @@
 
 #include "behaviortree_cpp_v3/control_node.h"
 #include "behaviortree_cpp_v3/config.h"
-#include "map"
+#include "unordered_map"
 
 namespace BT {
     class Dispatcher : public ControlNode {
@@ -47,7 +47,7 @@ namespace BT {
 
         bool m_initialized = false;
 
-        std::map<event_t, TreeNode *> m_map;
+        std::unordered_map<event_t, TreeNode *> m_map;
 
         event_t m_current_child_index = invalid;
     };
