@@ -5,8 +5,8 @@
 #ifndef PLANTSIO_IVY_CONFIG_H
 #define PLANTSIO_IVY_CONFIG_H
 
-#define BT_VALUE_INPUT_NAME     "value"
-#define BT_VALUE_TARGET_NAME    "to"
+#define BT_VALUE_INPUT_NAME     "index"
+#define BT_VALUE_TARGET_NAME    "target"
 #define BT_CONDITION_NAME       "condition"
 
 namespace BT {
