@@ -5,12 +5,12 @@
 #include "behaviortree_cpp_v3/decorators/DecoratorEvent.h"
 #include "behaviortree_cpp_v3/decorators/PropReenter.h"
 
+
 namespace BT {
     NodeStatus DecoratorEvent::tick() {
         if (!m_initialized) {
             m_initialized = true;
-            NodeStatus new_status = on_init();
-//            return new_status;
+            on_init();
         }
         return child()->executeTick();
     }
