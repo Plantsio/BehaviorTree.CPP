@@ -56,8 +56,8 @@ namespace BT {
 
     NodeStatus Dispatcher::on_init() {
         for (auto child: children_nodes_) {
-            auto ret = child->getInput<int>(DECORATOR_INDEX_NAME);
-            if (ret.has_value()) {
+            Optional<int> ret = child->getInput<int>(DECORATOR_INDEX_NAME);
+            if (ret) {
                 m_map[(event_t) ret.value()] = child;
             }
         }

@@ -9,6 +9,8 @@
 
 #include "Engine/Public.h"
 #include "Body/Skin.h"
+#include "Anim/IvyAnim.h"
+#include "Anim/drivers/EmoDriver.h"
 
 #endif
 
@@ -53,6 +55,7 @@ namespace BT {
         return true;
 #endif
     }
+
     bool get_value(value_t index, double &value) {
 #ifdef Ivy
         switch (index) {
@@ -79,5 +82,13 @@ namespace BT {
         }
 #endif
         return true;
+    }
+
+    std::string get_current_anim_name() {
+#ifdef Ivy
+        return EmoDriver::instance().get_current_anim_unit_name();
+#else
+        return "";
+#endif
     }
 }

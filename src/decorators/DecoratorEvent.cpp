@@ -16,13 +16,21 @@ namespace BT {
     }
 
     int DecoratorEvent::get_priority() {
-        auto ret = getInput<int>(DECORATOR_PRIORITY_NAME);
-        return ret.value();
+        Optional<int> ret = getInput<int>(DECORATOR_PRIORITY_NAME);
+        if (ret) {
+            return ret.value();
+        } else {
+            return 0;
+        }
     }
 
     int DecoratorEvent::get_index() {
-        auto ret = getInput<int>(DECORATOR_INDEX_NAME);
-        return ret.value();
+        Optional<int> ret = getInput<int>(DECORATOR_INDEX_NAME);
+        if (ret) {
+            return ret.value();
+        } else {
+            return 0;
+        }
     }
 
     NodeStatus DecoratorEvent::on_init() {
