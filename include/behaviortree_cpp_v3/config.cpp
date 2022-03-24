@@ -3,7 +3,7 @@
 //
 
 
-#include "config.h"
+#include "config_implt.h"
 
 #ifdef Ivy
 
@@ -15,6 +15,8 @@
 #endif
 
 namespace BT {
+
+
     bool get_condition(condition_t condition) {
 #ifdef Ivy
         bool ret = false;

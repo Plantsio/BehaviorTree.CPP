@@ -28,17 +28,7 @@ namespace BT {
             return get_evt_by_index(m_current_child_index);
         }
 
-        TreeNode *get_evt_by_index(event_t index) {
-            if (index == invalid) {
-                return nullptr;
-            }
-            auto ret = m_map.find(index);
-            if (ret != m_map.end()) {
-                return ret->second;
-            } else {
-                return nullptr;
-            }
-        }
+        TreeNode *get_evt_by_index(event_t index);
 
     private:
         NodeStatus tick() override;
@@ -49,7 +39,7 @@ namespace BT {
 
         std::unordered_map<event_t, TreeNode *> m_map;
 
-        event_t m_current_child_index = invalid;
+        event_t m_current_child_index;
     };
 }
 

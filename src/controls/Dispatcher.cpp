@@ -7,10 +7,13 @@
 #ifdef Ivy
 
 #include "Engine/Behavior/EventDispatcher.h"
+#include "behaviortree_cpp_v3/config_implt.h"
 
 namespace BT {
 
-    Dispatcher::Dispatcher(const std::string &name) : ControlNode(name, {}) {
+    Dispatcher::Dispatcher(const std::string &name)
+            : ControlNode(name, {}),
+              m_current_child_index(invalid) {
         setRegistrationID("Dispatcher");
         EventDispatcher::instance().set_bt_dispatcher(this);
     }
@@ -63,6 +66,18 @@ namespace BT {
             }
         }
         return NodeStatus::SUCCESS;
+    }
+
+    TreeNode *Dispatcher::get_evt_by_index(event_t index) {
+        if (index == invalid) {
+            return nullptr;
+        }
+        auto ret = m_map.find(index);
+        if (ret != m_map.end()) {
+            return ret->second;
+        } else {
+            return nullptr;
+        }
     }
 
 #else
