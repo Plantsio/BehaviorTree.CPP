@@ -38,7 +38,7 @@ namespace BT {
 //            m_transition = SerializeTransition(node.UID(), timestamp, prev_status, status);
             std::lock_guard<std::recursive_mutex> lock(m_mutex);
             m_transition_buf.push_back(transition);
-                flush();
+//                flush();
             /* one or more subscribers present */
 //            if (millis() - m_last_flush_t > 1) {
 //                /* note flush behavior is control*/
