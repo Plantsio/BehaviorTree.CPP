@@ -35,7 +35,6 @@ namespace BT {
         size_t current_child_idx_ = 0;
 
         void advance() {
-            log_d("debug-bt rotation advance");
             current_child_idx_++;
             if (current_child_idx_ == children_nodes_.size()) {
                 current_child_idx_ = 0;
