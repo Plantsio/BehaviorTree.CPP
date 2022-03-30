@@ -11,12 +11,17 @@
 #define ANIMATION_NODE_N "n"
 
 #ifdef Ivy
+
 #include "Anim/Anim.h"
+
 #endif
+
 namespace BT {
     class ControlAnim : public ControlNode {
     public:
-        explicit ControlAnim(const std::string &name) : ControlNode(name, {}) {
+        explicit ControlAnim(const std::string &name, bool t_insert = false)
+                : ControlNode(name, {}),
+                  m_insert(t_insert) {
             setRegistrationID("ControlAnim");
         }
 
@@ -24,6 +29,7 @@ namespace BT {
 
     private:
 #ifdef Ivy
+
         void set_status(Anim::anim_complete_ret t_status) {
             if (t_status == Anim::success) {
                 setStatus(NodeStatus::SUCCESS);
@@ -34,6 +40,8 @@ namespace BT {
 
         std::weak_ptr<Anim> anim;
 #endif
+        bool m_insert;
+
         NodeStatus onStart();
 
         void onHalted();

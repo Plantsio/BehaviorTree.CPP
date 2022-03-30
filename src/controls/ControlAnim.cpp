@@ -10,13 +10,19 @@
 
 BT::NodeStatus BT::ControlAnim::onStart() {
     auto a = Anim::create({}, [this](Anim::anim_complete_ret ret) { this->set_status(ret); });
-    for (auto child: children()) {
-        Optional<int> ret = child->getInput<int>(ANIMATION_NODE_N);
-        if (!ret) {
-            return NodeStatus::FAILURE;
+    if (!m_insert) {
+        /* play new animation */
+        for (auto child: children()) {
+            Optional<int> ret = child->getInput<int>(ANIMATION_NODE_N);
+            if (!ret) {
+                return NodeStatus::FAILURE;
+            }
+            a->add_unit(AnimUnit(child->name(), ret.value()));
+            log_v("debug-bt add %s | %d", child->name().c_str(), n.value());
         }
-        a->add_unit(AnimUnit(child->name(), ret.value()));
-        log_v("debug-bt add %s | %d", child->name().c_str(), n.value());
+    }else{
+        /* insert animations to the current sequence */
+
     }
     anim = a;
     bool ret = EmoDriver::instance().set_current_anim(a);
