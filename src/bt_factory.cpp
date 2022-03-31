@@ -29,17 +29,7 @@ BehaviorTreeFactory::BehaviorTreeFactory()
     registerNodeType<ParallelNode>("Parallel");
     registerNodeType<ReactiveSequence>("ReactiveSequence");
     registerNodeType<ReactiveFallback>("ReactiveFallback");
-//    registerNodeType<ControlAnim>("ControlAnim");
-    NodeBuilder control_anim_new = [](const std::string &name, const NodeConfiguration &config) {
-        return std::make_unique<ControlAnim>(name, false);
-    };
-    NodeBuilder control_anim_insert = [](const std::string &name, const NodeConfiguration &config) {
-        return std::make_unique<ControlAnim>(name, true);
-    };
-    registerBuilder<ControlAnim>("NewAnim", control_anim_new);
-    registerBuilder<ControlAnim>("InsertAnim", control_anim_insert);
-
-
+    registerNodeType<ControlAnim>("ControlAnim");
     registerNodeType<IfThenElseNode>("IfThenElse");
     registerNodeType<ReactiveIfThenElse>("ReactiveIfThenElse");
     registerNodeType<Dispatcher>("Dispatcher");
