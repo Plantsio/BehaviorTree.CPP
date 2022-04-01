@@ -22,7 +22,10 @@ namespace BT {
         knock = 7,              /* 轻敲 */
         thump = 8,              /* 重击 */
         charging_change = 9,     /* 充电状态变更 */
-        light_change = 10,
+        light_change = 10,      /* 光突变 */
+        wake_up_suddenly = 11,  /* 突然醒来 */
+        wake_up_slowly = 12,    /* 缓慢醒来 */
+        sleep = 13,             /* 进入睡眠 */
     };
 
     enum condition_t : int {
