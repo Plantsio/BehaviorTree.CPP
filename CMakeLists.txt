@@ -63,13 +63,6 @@ list(APPEND BEHAVIOR_TREE_PUBLIC_LIBRARIES
     ${CMAKE_DL_LIBS}
 )
 
-if( ZMQ_FOUND )
-    message(STATUS "ZeroMQ found.")
-    add_definitions( -DZMQ_FOUND )
-    list(APPEND BT_SOURCE src/loggers/bt_zmq_publisher.cpp)
-else()
-    message(WARNING "ZeroMQ NOT found. Skipping the build of [PublisherZMQ] and [bt_recorder].")
-endif()
 
 set(BEHAVIOR_TREE_LIBRARY ${PROJECT_NAME})
 
@@ -196,9 +189,7 @@ else()
     add_library(${BEHAVIOR_TREE_LIBRARY} STATIC ${BT_SOURCE})
 endif()
 
-if( ZMQ_FOUND )
-    list(APPEND BUILD_TOOL_INCLUDE_DIRS ${ZMQ_INCLUDE_DIRS})
-endif()
+
 
 target_link_libraries(${BEHAVIOR_TREE_LIBRARY} PUBLIC
     ${BEHAVIOR_TREE_PUBLIC_LIBRARIES})
@@ -221,9 +212,6 @@ target_include_directories(${BEHAVIOR_TREE_LIBRARY} PUBLIC
     $<INSTALL_INTERFACE:include>
     ${BUILD_TOOL_INCLUDE_DIRS})
 
-if( ZMQ_FOUND )
-    target_compile_definitions(${BEHAVIOR_TREE_LIBRARY} PUBLIC ZMQ_FOUND)
-endif()
 
 if(MSVC)
 else()

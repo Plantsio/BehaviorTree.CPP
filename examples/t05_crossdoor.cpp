@@ -5,10 +5,6 @@
 #include "behaviortree_cpp_v3/loggers/bt_file_logger.h"
 #include "behaviortree_cpp_v3/bt_factory.h"
 
-#ifdef ZMQ_FOUND
-#include "behaviortree_cpp_v3/loggers/bt_zmq_publisher.h"
-#endif
-
 /** This is a more complex example that uses Fallback,
  * Decorators and Subtrees
  *
@@ -76,10 +72,6 @@ int main(int argc, char** argv)
     // This logger stores the execution time of each node
     MinitraceLogger logger_minitrace(tree, "bt_trace.json");
 
-#ifdef ZMQ_FOUND
-    // This logger publish status changes using ZeroMQ. Used by Groot
-    PublisherZMQ publisher_zmq(tree);
-#endif
 
     printTreeRecursively(tree.rootNode());
 
