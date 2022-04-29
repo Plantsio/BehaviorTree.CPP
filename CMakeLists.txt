@@ -56,7 +56,6 @@ endif()
 
 #---- Find other packages ----
 find_package(Threads)
-find_package(ZMQ)
 
 list(APPEND BEHAVIOR_TREE_PUBLIC_LIBRARIES
     ${CMAKE_THREAD_LIBS_INIT}
