@@ -36,6 +36,7 @@ namespace BT {
         touching_right = 5,     /* 触摸右侧中 */
         touching_plant = 6,     /* 触摸植物中 */
         hugging = 7,            /* 抱住中 */
+        is_daytime = 8,         /* 处于白天 */
     };
 
     enum value_t : int {
@@ -45,6 +46,10 @@ namespace BT {
         water_level = 4,        /* 水位 */
         battery = 5,            /* 电量 */
         soil_moisture = 6,      /* 土壤湿度 */
+        current_hour = 7,       /* 当前小时 */
+        inactive_minute = 8,    /* 非活跃分钟数 */
+        current_weather = 9,    /* 当前天气 */
+        watering_status = 10,   /* 当前浇水状态 */
     };
 }
 #endif //PLANTSIO_IVY_CONFIG_IMPLT_H
