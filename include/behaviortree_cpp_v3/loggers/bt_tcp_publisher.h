@@ -13,15 +13,15 @@ namespace BT {
     class PublisherTCP : public StatusChangeLogger, public TcpPublisher{
         static std::atomic<bool> ref_count;
     public:
-        PublisherTCP(const BT::Tree &t_tree);
+        explicit PublisherTCP(const BT::Tree &t_tree);
 
         void flush_if_subscribed();
 
     private:
-        virtual void callback(Duration timestamp, const TreeNode &node, NodeStatus prev_status,
+        void callback(Duration timestamp, const TreeNode &node, NodeStatus prev_status,
                               NodeStatus status) override;
 
-        virtual void flush() override;
+        void flush() override;
 
         const BT::Tree &m_tree;
         std::vector<uint8_t> m_status_buf;

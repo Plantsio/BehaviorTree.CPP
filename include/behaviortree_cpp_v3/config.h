@@ -29,6 +29,7 @@ namespace BT {
     bool get_value(value_t index, double &value);
 
     /* get the nam of the currently playing animation */
+    std::string get_interrupted_anim_name();
     std::string get_current_anim_name();
 }
 

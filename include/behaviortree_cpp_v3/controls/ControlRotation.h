@@ -14,6 +14,7 @@ namespace BT {
         }
 
         NodeStatus tick() override {
+            setStatus(NodeStatus::RUNNING);
             TreeNode *current_child_node = children_nodes_[current_child_idx_];
             const NodeStatus child_status = current_child_node->executeTick();
             if (child_status != NodeStatus::RUNNING) {

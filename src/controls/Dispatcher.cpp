@@ -26,9 +26,11 @@ namespace BT {
     NodeStatus Dispatcher::tick() {
         if (!m_initialized) {
             m_initialized = true;
-            NodeStatus new_status = on_init();
+            on_init();
 //            return new_status;
         }
+
+        setStatus(NodeStatus::RUNNING);
 
         NodeStatus _status;
         if (m_current_child_index != invalid) {
@@ -36,12 +38,6 @@ namespace BT {
             if (ret != m_map.end()) {
                 TreeNode *current_child = ret->second;
                 _status = current_child->executeTick();
-//                if (status == NodeStatus::SUCCESS || status == NodeStatus::RUNNING) {
-//                    /* current running task is completed */
-//                    m_current_child_index = invalid;
-//                } else if (status == NodeStatus::IDLE) {
-//                    log_e("debug-bt child returned idle status");
-//                }
             } else {
                 log_w("debug-bt node not found");
                 _status = NodeStatus::FAILURE;
