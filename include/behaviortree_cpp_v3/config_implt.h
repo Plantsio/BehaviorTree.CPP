@@ -14,18 +14,20 @@ namespace BT {
         invalid = -1,
         blank_tick = 0,
         idle_routine = 1,       /* 空闲 */
-        touch_left = 2,         /* 触摸左侧 */
-        touch_right = 3,        /* 触摸右侧 */
+        touch_left_or_right = 2,         /* 触摸左侧 */
+
         touch_hug = 4,          /* 触摸两侧 */
         touch_plant = 5,        /* 触摸植物 */
         pot_change = 6,         /* 盆状态改变 */
         knock = 7,              /* 轻敲 */
         thump = 8,              /* 重击 */
-        charging_change = 9,     /* 充电状态变更 */
-        light_change = 10,      /* 光突变 */
+        batt_change = 9,        /* 充电状态变更 */
+        sun_change = 10,        /* 阳光状态变更 */
         wake_up_suddenly = 11,  /* 突然醒来 */
         wake_up_slowly = 12,    /* 缓慢醒来 */
         sleep = 13,             /* 进入睡眠 */
+        water_change = 14,      /* 水位状态变更 */
+        temp_change = 15,       /* 温度状态变更 */
     };
 
     enum condition_t : int {
@@ -48,8 +50,12 @@ namespace BT {
         soil_moisture = 6,      /* 土壤湿度 */
         current_hour = 7,       /* 当前小时 */
         inactive_minute = 8,    /* 非活跃分钟数 */
-        current_weather = 9,    /* 当前天气 */
-        watering_status = 10,   /* 当前浇水状态 */
+        mood = 9,
+        water_status = 10,      /* 当前浇水状态 */
+        sun_status = 11,        /* 当前阳光状态 */
+        temp_status = 12,       /* 当前温度状态 */
+        batt_status = 13,       /* 当前电池状态 */
+        loneliness = 14,
     };
 
     /* todo

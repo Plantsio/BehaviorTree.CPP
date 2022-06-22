@@ -11,6 +11,9 @@
 #include "Body/Skin.h"
 #include "Anim/IvyAnim.h"
 #include "Engine/Behavior/EventDispatcher.h"
+#include "Body/Plant.h"
+#include "Engine/Behavior/IvyBehavior.h"
+#include "Engine/IvyEngine.h"
 
 #endif
 
@@ -47,6 +50,9 @@ namespace BT {
             case hugging:
                 ret = Skin::instance().hugging();
                 break;
+            case is_daytime:
+                ret = Public::is_daytime();
+                break;
         }
         if (reverse) {
             return !ret;
@@ -78,6 +84,30 @@ namespace BT {
                 break;
             case soil_moisture:
                 value = Prop::get<double>(Prop::soil_moisture);
+                break;
+            case current_hour:
+                value = Public::get_hour();
+                break;
+            case water_status:
+                value = Plant::instance().get_status().water_status;
+                break;
+            case sun_status:
+                value = Plant::instance().get_status().sun_status;
+                break;
+            case temp_status:
+                value = Plant::instance().get_status().temp_status;
+                break;
+            case batt_status:
+                value = Plant::instance().get_status().batt_status;
+                break;
+            case mood:
+                value = IvyBehavior::instance().get_emotion_value(IvyBehavior::mood);
+                break;
+            case loneliness:
+                value = IvyBehavior::instance().get_emotion_value(IvyBehavior::loneliness);
+                break;
+            case inactive_minute:
+                value = IvyEngine::instance().get_inactive_t() / 60000;
                 break;
             default:
                 return false;
