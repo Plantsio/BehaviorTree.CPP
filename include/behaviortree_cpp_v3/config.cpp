@@ -119,8 +119,9 @@ namespace BT {
 
     std::string get_interrupted_anim_name() {
 #ifdef Ivy
+        return EmoDriver::instance().get_interrupted_anim_name();
 //        return EmoDriver::instance().get_current_anim_unit_name();
-        return EventDispatcher::instance().get_interrupted_anim_name();
+//        return EventDispatcher::instance().get_interrupted_anim_name();
 #else
         return "";
 #endif

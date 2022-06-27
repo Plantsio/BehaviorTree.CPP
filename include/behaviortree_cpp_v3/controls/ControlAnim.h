@@ -11,7 +11,9 @@
 #define ANIMATION_NODE_N "n"
 
 #ifdef Ivy
+
 #include "Anim/Anim.h"
+
 #endif
 namespace BT {
     class ControlAnim : public ControlNode {
@@ -24,16 +26,12 @@ namespace BT {
 
     private:
 #ifdef Ivy
-        void set_status(Anim::anim_complete_ret t_status) {
-            if (t_status == Anim::success) {
-                setStatus(NodeStatus::SUCCESS);
-            } else if (t_status == Anim::failure || t_status == Anim::interrupted) {
-                setStatus(NodeStatus::FAILURE);
-            }
-        }
+
+        void set_status(Anim::anim_complete_ret t_status);
 
         std::weak_ptr<Anim> anim;
 #endif
+
         NodeStatus onStart();
 
         void onHalted();

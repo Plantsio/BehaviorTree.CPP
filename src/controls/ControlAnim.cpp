@@ -7,6 +7,7 @@
 #ifdef Ivy
 
 #include "Anim/drivers/EmoDriver.h"
+#include "Engine/Behavior/EventDispatcher.h"
 
 BT::NodeStatus BT::ControlAnim::onStart() {
     auto a = Anim::create({}, [this](Anim::anim_complete_ret ret) { this->set_status(ret); });
@@ -35,6 +36,15 @@ void BT::ControlAnim::onHalted() {
     }
 }
 
+void BT::ControlAnim::set_status(Anim::anim_complete_ret t_status) {
+            if (t_status == Anim::success) {
+                setStatus(NodeStatus::SUCCESS);
+            } else if (t_status == Anim::failure || t_status == Anim::interrupted) {
+                setStatus(NodeStatus::FAILURE);
+            }
+            EventDispatcher::instance().dispatch(blank_tick);
+}
+
 #else
 
 BT::NodeStatus BT::ControlAnim::onStart() {
@@ -42,6 +52,8 @@ BT::NodeStatus BT::ControlAnim::onStart() {
 }
 
 void BT::ControlAnim::onHalted() {}
+
+void BT::ControlAnim::set_status(Anim::anim_complete_ret t_status){}
 
 #endif
 
