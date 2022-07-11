@@ -110,6 +110,9 @@ namespace BT {
             case inactive_minute:
                 value = IvyEngine::instance().get_inactive_t() / 60000;
                 break;
+            case emotion_status:
+                value = IvyBehavior::instance().get_current_emo_status();
+                break;
             default:
                 return false;
         }
