@@ -53,7 +53,7 @@ BT::NodeStatus BT::ControlAnim::onStart() {
 
 void BT::ControlAnim::onHalted() {}
 
-void BT::ControlAnim::set_status(Anim::anim_complete_ret t_status){}
+//void BT::ControlAnim::set_status(Anim::anim_complete_ret t_status){}
 
 #endif
 
