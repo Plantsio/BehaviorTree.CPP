@@ -789,10 +789,10 @@ std::string writeTreeNodesModelXML(const BehaviorTreeFactory& factory)
             continue;
         }
 
-        if (model.type == NodeType::CONTROL)
-        {
-            continue;
-        }
+//        if (model.type == NodeType::CONTROL)
+//        {
+//            continue;
+//        }
         XMLElement* element = doc.NewElement( toStr(model.type).c_str() );
         element->SetAttribute("ID", model.registration_ID.c_str());
 
