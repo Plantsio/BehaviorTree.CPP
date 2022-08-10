@@ -15,7 +15,7 @@ namespace BT {
     class DecoratorEvent : public DecoratorNode {
     public:
         DecoratorEvent(const std::string &name, const NodeConfiguration &config)
-                : DecoratorNode(name, config){}
+                : DecoratorNode(name, config) {}
 
         static PortsList providedPorts() {
             return {InputPort<int>(DECORATOR_PRIORITY_NAME), InputPort<int>(DECORATOR_INDEX_NAME)};
@@ -23,19 +23,24 @@ namespace BT {
 
         NodeStatus tick() override;
 
-        int get_priority();
+        int get_priority() const;
+
+        void set_priority(int prio);
 
         int get_index();
 
-        bool get_reenter() const{
+        bool get_reenter() const {
             return m_reenter;
         }
 
         NodeStatus on_init();
 
+        void halt() override;
+
     private:
         bool m_reenter = false;
         bool m_initialized = false;
+        int m_priority = 0;
     };
 }
 

@@ -15,13 +15,8 @@ namespace BT {
         return child()->executeTick();
     }
 
-    int DecoratorEvent::get_priority() {
-        Optional<int> ret = getInput<int>(DECORATOR_PRIORITY_NAME);
-        if (ret) {
-            return ret.value();
-        } else {
-            return 0;
-        }
+    int DecoratorEvent::get_priority() const {
+        return m_priority;
     }
 
     int DecoratorEvent::get_index() {
@@ -37,6 +32,20 @@ namespace BT {
         if (auto prop = dynamic_cast<PropReenter *>(child())) {
             m_reenter = true;
         }
+        Optional<int> ret = getInput<int>(DECORATOR_PRIORITY_NAME);
+        if (ret) {
+            m_priority = ret.value();
+        } else {
+            m_priority = 0;
+        }
         return NodeStatus::SUCCESS;
+    }
+
+    void DecoratorEvent::halt() {
+        DecoratorNode::halt();
+    }
+
+    void DecoratorEvent::set_priority(int prio) {
+        m_priority = prio;
     }
 }
