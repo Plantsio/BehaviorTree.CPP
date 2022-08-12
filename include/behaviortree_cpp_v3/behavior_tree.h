@@ -26,7 +26,6 @@
 #include "behaviortree_cpp_v3/controls/if_then_else_node.h"
 #include "behaviortree_cpp_v3/controls/ReactiveIfThenElse.h"
 #include "behaviortree_cpp_v3/controls/Dispatcher.h"
-#include "behaviortree_cpp_v3/controls/Manager.h"
 #include "behaviortree_cpp_v3/controls/RandomFallback.h"
 #include "behaviortree_cpp_v3/controls/while_do_else_node.h"
 #include "behaviortree_cpp_v3/controls/ControlRotation.h"

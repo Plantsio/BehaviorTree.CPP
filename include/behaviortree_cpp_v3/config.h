@@ -12,6 +12,7 @@
 #define BT_ANIM_NAME            "anim"
 #define BT_VALUE_TARGET_NAME    "target"
 #define BT_CONDITION_NAME       "condition"
+#define ANIMATION_NODE_N        "n"
 #include "string"
 
 namespace BT {

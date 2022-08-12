@@ -28,6 +28,8 @@ namespace BT {
         sleep = 13,             /* 进入睡眠 */
         water_change = 14,      /* 水位状态变更 */
         temp_change = 15,       /* 温度状态变更 */
+
+        trans_manager = 101,
     };
 
     enum condition_t : int {
