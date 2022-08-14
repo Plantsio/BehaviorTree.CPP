@@ -15,7 +15,9 @@ namespace BT {
     class DecoratorEvent : public DecoratorNode {
     public:
         DecoratorEvent(const std::string &name, const NodeConfiguration &config)
-                : DecoratorNode(name, config) {}
+                : DecoratorNode(name, config) {
+                reset_priority();
+        }
 
         static PortsList providedPorts() {
             return {InputPort<int>(DECORATOR_PRIORITY_NAME), InputPort<int>(DECORATOR_INDEX_NAME)};
@@ -38,6 +40,8 @@ namespace BT {
         void halt() override;
 
     private:
+        void reset_priority();
+
         bool m_reenter = false;
         bool m_initialized = false;
         int m_priority = 0;

@@ -32,20 +32,24 @@ namespace BT {
         if (auto prop = dynamic_cast<PropReenter *>(child())) {
             m_reenter = true;
         }
+        return NodeStatus::SUCCESS;
+    }
+
+    void DecoratorEvent::halt() {
+        reset_priority();
+        DecoratorNode::halt();
+    }
+
+    void DecoratorEvent::set_priority(int prio) {
+        m_priority = prio;
+    }
+
+    void DecoratorEvent::reset_priority() {
         Optional<int> ret = getInput<int>(DECORATOR_PRIORITY_NAME);
         if (ret) {
             m_priority = ret.value();
         } else {
             m_priority = 0;
         }
-        return NodeStatus::SUCCESS;
-    }
-
-    void DecoratorEvent::halt() {
-        DecoratorNode::halt();
-    }
-
-    void DecoratorEvent::set_priority(int prio) {
-        m_priority = prio;
     }
 }
