@@ -14,7 +14,6 @@
 #ifndef BEHAVIOR_TREE_H
 #define BEHAVIOR_TREE_H
 
-#include "behaviortree_cpp_v3/controls/parallel_node.h"
 #include "behaviortree_cpp_v3/controls/reactive_sequence.h"
 #include "behaviortree_cpp_v3/controls/reactive_fallback.h"
 #include "behaviortree_cpp_v3/controls/ControlAnim.h"
@@ -34,8 +33,6 @@
 #include "behaviortree_cpp_v3/condition_node.h"
 
 #include "behaviortree_cpp_v3/decorators/inverter_node.h"
-#include "behaviortree_cpp_v3/decorators/retry_node.h"
-#include "behaviortree_cpp_v3/decorators/repeat_node.h"
 #include "behaviortree_cpp_v3/decorators/subtree_node.h"
 #include "behaviortree_cpp_v3/decorators/DecoratorEvent.h"
 #include "behaviortree_cpp_v3/decorators/PropReenter.h"
@@ -48,8 +45,6 @@
 #include "behaviortree_cpp_v3/decorators/force_failure_node.h"
 #include "behaviortree_cpp_v3/decorators/keep_running_until_failure_node.h"
 #include "behaviortree_cpp_v3/decorators/blackboard_precondition.h"
-#include "behaviortree_cpp_v3/decorators/timeout_node.h"
-#include "behaviortree_cpp_v3/decorators/delay_node.h"
 
 #include <iostream>
 

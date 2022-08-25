@@ -26,7 +26,6 @@ BehaviorTreeFactory::BehaviorTreeFactory()
     registerNodeType<FallbackNode>("Fallback");
     registerNodeType<SequenceNode>("Sequence");
     registerNodeType<SequenceStarNode>("SequenceStar");
-    registerNodeType<ParallelNode>("Parallel");
     registerNodeType<ReactiveSequence>("ReactiveSequence");
     registerNodeType<ReactiveFallback>("ReactiveFallback");
     registerNodeType<ControlAnim>("ControlAnim");
@@ -39,11 +38,7 @@ BehaviorTreeFactory::BehaviorTreeFactory()
 
     registerNodeType<InverterNode>("Inverter");
     //registerNodeType<RetryNodeTypo>("RetryUntilSuccesful"); //typo but back compatibility
-    registerNodeType<RetryNode>("RetryUntilSuccessful"); // correct one
     registerNodeType<KeepRunningUntilFailureNode>("KeepRunningUntilFailure");
-    registerNodeType<RepeatNode>("Repeat");
-    registerNodeType<TimeoutNode<>>("Timeout");
-    registerNodeType<DelayNode>("Delay");
     registerNodeType<DecoratorEvent>("Event");
     registerNodeType<PropReenter>("Reenter");
 
