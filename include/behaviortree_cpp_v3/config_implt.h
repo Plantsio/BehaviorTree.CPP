@@ -41,6 +41,7 @@ namespace BT {
         touching_plant = 6,     /* 触摸植物中 */
         hugging = 7,            /* 抱住中 */
         is_daytime = 8,         /* 处于白天 */
+        night_sleeping = 9,     /* 夜间睡眠中 */
     };
 
     enum value_t : int {

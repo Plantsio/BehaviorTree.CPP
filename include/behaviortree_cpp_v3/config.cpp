@@ -54,6 +54,10 @@ namespace BT {
             case is_daytime:
                 ret = Public::is_daytime();
                 break;
+            case night_sleeping:
+                /* only fake sleeping is considered */
+                ret = IvyEngine::instance().fake_sleeping();
+                break;
         }
         if (reverse) {
             return !ret;
