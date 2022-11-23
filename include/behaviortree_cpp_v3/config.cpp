@@ -7,7 +7,7 @@
 
 #ifdef Ivy
 
-#include "Engine/Public.h"
+#include "Ivy-sdk/src/common/Sys.h"
 #include "Body/Skin.h"
 #include "Anim/IvyAnim.h"
 #include "Engine/Behavior/EventDispatcher.h"
@@ -52,7 +52,7 @@ namespace BT {
                 ret = Skin::instance().hugging();
                 break;
             case is_daytime:
-                ret = Public::is_daytime();
+                ret = Sys::is_daytime();
                 break;
             case night_sleeping:
                 /* only fake sleeping is considered */
@@ -91,7 +91,7 @@ namespace BT {
                 value = Prop::get<double>(Prop::soil_moisture);
                 break;
             case current_hour:
-                value = Public::get_hour();
+                value = Sys::get_hour();
                 break;
             case water_status:
                 value = Plant::instance().get_status().water_status;
