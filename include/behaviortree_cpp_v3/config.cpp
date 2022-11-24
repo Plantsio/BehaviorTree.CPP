@@ -7,7 +7,7 @@
 
 #ifdef Ivy
 
-#include "Ivy-sdk/src/common/Sys.h"
+#include "common/Sys.h"
 #include "Body/Skin.h"
 #include "Anim/IvyAnim.h"
 #include "Engine/Behavior/EventDispatcher.h"
