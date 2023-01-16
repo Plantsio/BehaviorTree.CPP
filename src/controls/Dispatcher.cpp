@@ -39,7 +39,7 @@ namespace BT {
                 TreeNode *current_child = ret->second;
                 _status = current_child->executeTick();
             } else {
-                log_w("debug-bt node not found");
+                log_w("debug-bt event %d not found", m_current_child_index);
                 _status = NodeStatus::FAILURE;
             }
         } else {
