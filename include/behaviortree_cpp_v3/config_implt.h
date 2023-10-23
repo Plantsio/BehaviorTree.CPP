@@ -29,6 +29,9 @@ namespace BT {
         water_change = 14,      /* 水位状态变更 */
         temp_change = 15,       /* 温度状态变更 */
 
+        sun_up_fast = 16,       /* 光照突然变高 */
+        sun_down_fast = 17,     /* 光照突然变低 */
+
         trans_manager = 101,
     };
 
@@ -60,6 +63,9 @@ namespace BT {
         batt_status = 13,       /* 当前电池状态 */
         loneliness = 14,        /* 孤独值 */
         emotion_status =15,     /* 情感状态 */
+        timestamp = 16,         /* 时间戳 */
+        date_time = 17,         /* 月日时 */
+
     };
 
     /* todo

@@ -8,6 +8,7 @@
 #ifdef Ivy
 
 #include "common/Sys.h"
+#include "tool/system.h"
 #include "Body/Skin.h"
 #include "Anim/IvyAnim.h"
 #include "Engine/Behavior/EventDispatcher.h"
@@ -116,6 +117,18 @@ namespace BT {
                 break;
             case emotion_status:
                 value = IvyBehavior::instance().get_current_emo_status();
+                break;
+            case timestamp:
+                if (Sys::check_condition(Sys::TIME_SYNCHRONIZED))
+                    value = get_ymdh(Sys::get_geo_info().timestamp);
+                else
+                    value = 9999999999;
+                break;
+            case date_time:
+                if (Sys::check_condition(Sys::TIME_SYNCHRONIZED))
+                    value = get_mdh(Sys::get_geo_info().timestamp);
+                else
+                    value = 999999;
                 break;
             default:
                 return false;
