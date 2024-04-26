@@ -20,7 +20,7 @@ namespace BT {
         }
 
         static PortsList providedPorts() {
-            return {InputPort<int>(DECORATOR_PRIORITY_NAME), InputPort<int>(DECORATOR_INDEX_NAME)};
+            return {InputPort<int>(DECORATOR_PRIORITY_NAME), InputPort<event_t>(DECORATOR_INDEX_NAME)};
         }
 
         NodeStatus tick() override;

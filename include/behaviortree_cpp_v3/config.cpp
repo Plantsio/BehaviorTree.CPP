@@ -74,22 +74,22 @@ namespace BT {
 #ifdef Ivy
         switch (index) {
             case temp:
-                value = Prop::get<double>(Prop::temperature);
+                value = Prop::get<int>(Prop::temperature);
                 break;
             case humidity:
-                value = Prop::get<double>(Prop::humidity);
+                value = Prop::get<int>(Prop::humidity);
                 break;
             case light:
-                value = Prop::get<double>(Prop::ambient_light);
+                value = Prop::get<int>(Prop::ambient_light);
                 break;
             case water_level:
-                value = Prop::get<double>(Prop::water_level);
+                value = Prop::get<int>(Prop::water_level);
                 break;
             case battery:
-                value = Prop::get<double>(Prop::battery_percent);
+                value = Prop::get<int>(Prop::battery_percent);
                 break;
             case soil_moisture:
-                value = Prop::get<double>(Prop::soil_moisture);
+                value = Prop::get<int>(Prop::soil_moisture);
                 break;
             case current_hour:
                 value = Sys::get_hour();
