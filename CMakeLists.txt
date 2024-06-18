@@ -289,7 +289,7 @@ export(PACKAGE ${PROJECT_NAME})
 ######################################################
 # EXAMPLES and TOOLS
 if(BUILD_TOOLS)
-    add_subdirectory(tools)
+    add_subdirectory(bt_tools)
 endif()
 
 if(BUILD_EXAMPLES AND BUILD_SAMPLES)
