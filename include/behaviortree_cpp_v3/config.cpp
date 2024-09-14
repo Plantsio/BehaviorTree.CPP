@@ -7,7 +7,7 @@
 
 #ifdef Ivy
 
-#include "common/Sys.h"
+#include "common/SysOld.h"
 #include "tool/system.h"
 #include "Body/Skin.h"
 #include "Anim/IvyAnim.h"
@@ -53,7 +53,7 @@ namespace BT {
                 ret = Skin::instance().hugging();
                 break;
             case is_daytime:
-                ret = Sys::is_daytime();
+                ret = SysOld::is_daytime();
                 break;
             case night_sleeping:
                 /* only fake sleeping is considered */
@@ -92,7 +92,7 @@ namespace BT {
                 value = Prop::get<int>(Prop::soil_moisture);
                 break;
             case current_hour:
-                value = Sys::get_hour();
+                value = SysOld::get_hour();
                 break;
             case water_status:
                 value = Plant::instance().get_status().water_status;
@@ -119,14 +119,14 @@ namespace BT {
                 value = IvyBehavior::instance().get_current_emo_status();
                 break;
             case timestamp:
-                if (Sys::check_condition(Sys::TIME_SYNCHRONIZED))
-                    value = get_ymdh(Sys::get_geo_info().timestamp);
+                if (SysOld::check_condition(SysOld::TIME_SYNCHRONIZED))
+                    value = get_ymdh(SysOld::get_geo_info().timestamp);
                 else
                     value = 9999999999;
                 break;
             case date_time:
-                if (Sys::check_condition(Sys::TIME_SYNCHRONIZED))
-                    value = get_mdh(Sys::get_geo_info().timestamp);
+                if (SysOld::check_condition(SysOld::TIME_SYNCHRONIZED))
+                    value = get_mdh(SysOld::get_geo_info().timestamp);
                 else
                     value = 999999;
                 break;
