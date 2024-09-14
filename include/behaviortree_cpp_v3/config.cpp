@@ -15,7 +15,7 @@
 #include "Body/Plant.h"
 #include "Engine/Behavior/IvyBehavior.h"
 #include "Engine/IvyEngine.h"
-#include "Anim/drivers/EmoDriver.h"
+//#include "Anim/drivers/EmoDriver.h"
 
 #endif
 
@@ -139,9 +139,10 @@ namespace BT {
 
     std::string get_interrupted_anim_name() {
 #ifdef Ivy
-        return EmoDriver::instance().get_interrupted_anim_name();
+        //return EmoDriver::instance().get_interrupted_anim_name();
 //        return EmoDriver::instance().get_current_anim_unit_name();
 //        return EventDispatcher::instance().get_interrupted_anim_name();
+		return "";
 #else
         return "";
 #endif
@@ -149,7 +150,8 @@ namespace BT {
 
     std::string get_current_anim_name() {
 #ifdef Ivy
-        return EmoDriver::instance().get_current_anim_unit_name();
+        //return EmoDriver::instance().get_current_anim_unit_name();
+		return "";
 #else
         return "";
 #endif

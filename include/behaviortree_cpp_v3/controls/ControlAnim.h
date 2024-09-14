@@ -12,8 +12,6 @@
 
 #ifdef Ivy
 
-#include "Anim/Anim.h"
-
 #endif
 namespace BT {
     class ControlAnim : public ControlNode {
@@ -27,9 +25,9 @@ namespace BT {
     private:
 #ifdef Ivy
 
-        void set_status(Anim::anim_complete_ret t_status);
+       // void set_status(Anim::anim_complete_ret t_status);
 
-        std::weak_ptr<Anim> anim;
+       // std::weak_ptr<Anim> anim;
 #endif
 
         NodeStatus onStart();
