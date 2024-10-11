@@ -6,7 +6,7 @@
 
 #ifdef Ivy
 
-#include "Engine/Behavior/EventDispatcher.h"
+#include "EventDispatcher.h"
 #include "behaviortree_cpp_v3/config_implt.h"
 
 namespace BT {

@@ -7,15 +7,14 @@
 
 #ifdef Ivy
 
-#include "common/SysOld.h"
-#include "tool/system.h"
-#include "Body/Skin.h"
-#include "Anim/IvyAnim.h"
-#include "Engine/Behavior/EventDispatcher.h"
-#include "Body/Plant.h"
-#include "Engine/Behavior/IvyBehavior.h"
-#include "Engine/IvyEngine.h"
-//#include "Anim/drivers/EmoDriver.h"
+#include "SysOld.h"
+#include "system.h"
+#include "Skin.h"
+#include "IvyAnim.h"
+#include "EventDispatcher.h"
+#include "Plant.h"
+#include "IvyBehavior.h"
+#include "IvyEngine.h"
 
 #endif
 
