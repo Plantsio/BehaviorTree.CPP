@@ -6,7 +6,7 @@
 #define PLANTSIO_IVY_DISPATCHER_H
 
 #include "behaviortree_cpp_v3/control_node.h"
-#include "behaviortree_cpp_v3/config.h"
+#include "bt_config.h"
 #include "unordered_map"
 
 namespace BT {

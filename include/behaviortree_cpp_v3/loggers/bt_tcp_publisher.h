@@ -7,7 +7,7 @@
 
 #include "abstract_logger.h"
 #include "WiFiClient.h"
-#include "tool/TcpPublisher.h"
+#include "TcpPublisher.h"
 
 namespace BT {
     class PublisherTCP : public StatusChangeLogger, public TcpPublisher{
