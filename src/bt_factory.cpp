@@ -28,19 +28,19 @@ BehaviorTreeFactory::BehaviorTreeFactory()
     registerNodeType<SequenceStarNode>("SequenceStar");
     registerNodeType<ReactiveSequence>("ReactiveSequence");
     registerNodeType<ReactiveFallback>("ReactiveFallback");
-    registerNodeType<ControlAnim>("ControlAnim");
+//    registerNodeType<ControlAnim>("ControlAnim");
     registerNodeType<IfThenElseNode>("IfThenElse");
-    registerNodeType<ReactiveIfThenElse>("ReactiveIfThenElse");
-    registerNodeType<Dispatcher>("Dispatcher");
-    registerNodeType<RandomFallback>("RandomFallback");
+//    registerNodeType<ReactiveIfThenElse>("ReactiveIfThenElse");
+//    registerNodeType<Dispatcher>("Dispatcher");
+//    registerNodeType<RandomFallback>("RandomFallback");
     registerNodeType<WhileDoElseNode>("WhileDoElse");
-    registerNodeType<ControlRotation>("Rotate");
+//    registerNodeType<ControlRotation>("Rotate");
 
     registerNodeType<InverterNode>("Inverter");
     //registerNodeType<RetryNodeTypo>("RetryUntilSuccesful"); //typo but back compatibility
     registerNodeType<KeepRunningUntilFailureNode>("KeepRunningUntilFailure");
-    registerNodeType<DecoratorEvent>("Event");
-    registerNodeType<PropReenter>("Reenter");
+//    registerNodeType<DecoratorEvent>("Event");
+//    registerNodeType<PropReenter>("Reenter");
 
     registerNodeType<ForceSuccessNode>("ForceSuccess");
     registerNodeType<ForceFailureNode>("ForceFailure");
