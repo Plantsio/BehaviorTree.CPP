@@ -178,7 +178,7 @@ class StatefulActionNode : public ActionNodeBase
       /// This is a convenient place todo a cleanup, if needed.
       virtual void onHalted() = 0;
 
-      void setStatus(BT::NodeStatus new_status) override;
+//      void setStatus(BT::NodeStatus new_status) override;
 };
 
 
