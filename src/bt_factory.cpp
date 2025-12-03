@@ -111,7 +111,12 @@ void BehaviorTreeFactory::registerSimpleCondition(const CustomString& ID,
         return std::make_unique<SimpleConditionNode>(name, tick_functor, config);
     };
 
-    TreeNodeManifest manifest = { NodeType::CONDITION, ID, std::move(ports) };
+    // Convert std::unordered_map to CustomUnorederMap
+    CustomPortsList custom_ports;
+    for (const auto& [key, value] : ports) {
+        custom_ports.emplace(CustomString(key.c_str()), value);
+    }
+    TreeNodeManifest manifest = { NodeType::CONDITION, ID, std::move(custom_ports) };
     registerBuilder(manifest, builder);
 }
 
@@ -123,7 +128,12 @@ void BehaviorTreeFactory::registerSimpleAction(const CustomString& ID,
         return std::make_unique<SimpleActionNode>(name, tick_functor, config);
     };
 
-    TreeNodeManifest manifest = { NodeType::ACTION, ID, std::move(ports) };
+    // Convert std::unordered_map to CustomUnorederMap
+    CustomPortsList custom_ports;
+    for (const auto& [key, value] : ports) {
+        custom_ports.emplace(CustomString(key.c_str()), value);
+    }
+    TreeNodeManifest manifest = { NodeType::ACTION, ID, std::move(custom_ports) };
     registerBuilder(manifest, builder);
 }
 
@@ -135,7 +145,12 @@ void BehaviorTreeFactory::registerSimpleDecorator(const CustomString& ID,
         return std::make_unique<SimpleDecoratorNode>(name, tick_functor, config);
     };
 
-    TreeNodeManifest manifest = { NodeType::DECORATOR, ID, std::move(ports) };
+    // Convert std::unordered_map to CustomUnorederMap
+    CustomPortsList custom_ports;
+    for (const auto& [key, value] : ports) {
+        custom_ports.emplace(CustomString(key.c_str()), value);
+    }
+    TreeNodeManifest manifest = { NodeType::DECORATOR, ID, std::move(custom_ports) };
     registerBuilder(manifest, builder);
 }
 

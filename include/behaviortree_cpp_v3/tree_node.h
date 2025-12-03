@@ -38,7 +38,7 @@ namespace BT {
     struct TreeNodeManifest {
         NodeType type;
         CustomString registration_ID;
-        PortsList ports;
+        CustomPortsList ports;
     };
 
     typedef std::unordered_map<std::string, std::string> PortsRemapping;

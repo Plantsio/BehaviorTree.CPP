@@ -76,7 +76,12 @@ namespace BT {
     template<typename T>
     inline
     TreeNodeManifest CreateManifest(const CustomString &ID, PortsList portlist = getProvidedPorts<T>()) {
-        return {getType<T>(), ID, portlist};
+        // Convert std::unordered_map to CustomUnorederMap
+        CustomPortsList custom_ports;
+        for (const auto& [key, value] : portlist) {
+            custom_ports.emplace(CustomString(key.c_str()), value);
+        }
+        return {getType<T>(), ID, custom_ports};
     }
 
 

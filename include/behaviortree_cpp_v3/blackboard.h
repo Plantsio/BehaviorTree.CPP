@@ -12,6 +12,7 @@
 #include "behaviortree_cpp_v3/basic_types.h"
 #include "behaviortree_cpp_v3/utils/safe_any.hpp"
 #include "behaviortree_cpp_v3/exceptions.h"
+#include "CustomContainer.h"
 
 namespace BT
 {
@@ -51,32 +52,34 @@ class Blackboard
     const Any* getAny(const std::string& key) const
     {
         std::unique_lock<std::mutex> lock(mutex_);
+        CustomString custom_key(key.c_str());
 
         if( auto parent = parent_bb_.lock())
         {
-            auto remapping_it = internal_to_external_.find(key);
+            auto remapping_it = internal_to_external_.find(custom_key);
             if( remapping_it != internal_to_external_.end())
             {
-                return parent->getAny( remapping_it->second );
+                return parent->getAny( to_std_string(remapping_it->second) );
             }
         }
-        auto it = storage_.find(key);
+        auto it = storage_.find(custom_key);
         return ( it == storage_.end()) ? nullptr : &(it->second.value);
     }
 
     Any* getAny(const std::string& key)
     {
         std::unique_lock<std::mutex> lock(mutex_);
+        CustomString custom_key(key.c_str());
 
         if( auto parent = parent_bb_.lock())
         {
-            auto remapping_it = internal_to_external_.find(key);
+            auto remapping_it = internal_to_external_.find(custom_key);
             if( remapping_it != internal_to_external_.end())
             {
-                return parent->getAny( remapping_it->second );
+                return parent->getAny( to_std_string(remapping_it->second) );
             }
         }
-        auto it = storage_.find(key);
+        auto it = storage_.find(custom_key);
         return ( it == storage_.end()) ? nullptr : &(it->second.value);
     }
 
@@ -118,26 +121,27 @@ class Blackboard
     {
         std::unique_lock<std::mutex> lock(mutex_);
         std::unique_lock<std::mutex> lock_entry(entry_mutex_);
-        auto it = storage_.find(key);
+        CustomString custom_key(key.c_str());
+        auto it = storage_.find(custom_key);
 
         if( auto parent = parent_bb_.lock())
         {
-            auto remapping_it = internal_to_external_.find(key);
+            auto remapping_it = internal_to_external_.find(custom_key);
             if( remapping_it != internal_to_external_.end())
             {
                 const auto& remapped_key = remapping_it->second;
                 if( it == storage_.end() ) // virgin entry
                 {
-                    auto parent_info = parent->portInfo(remapped_key);
+                    auto parent_info = parent->portInfo(to_std_string(remapped_key));
                     if( parent_info )
                     {
-                        storage_.emplace( key, Entry( *parent_info ) );
+                        storage_.emplace( custom_key, Entry( *parent_info ) );
                     }
                     else{
-                        storage_.emplace( key, Entry( PortInfo() ) );
+                        storage_.emplace( custom_key, Entry( PortInfo() ) );
                     }
                 }
-                parent->set( remapped_key, value );
+                parent->set( to_std_string(remapped_key), value );
                 return;
             }
         }
@@ -175,7 +179,7 @@ class Blackboard
             previous_any = std::move(temp);
         }
         else{ // create for the first time without any info
-            storage_.emplace( key, Entry( Any(value), PortInfo() ) );
+            storage_.emplace( custom_key, Entry( Any(value), PortInfo() ) );
         }
         return;
     }
@@ -223,9 +227,9 @@ class Blackboard
 
     mutable std::mutex mutex_;
     mutable std::mutex entry_mutex_;
-    std::unordered_map<std::string, Entry> storage_;
+    CustomUnorederMap<CustomString, Entry> storage_;
     std::weak_ptr<Blackboard> parent_bb_;
-    std::unordered_map<std::string,std::string> internal_to_external_;
+    CustomUnorederMap<CustomString, CustomString> internal_to_external_;
 
 };
 

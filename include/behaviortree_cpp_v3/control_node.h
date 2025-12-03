@@ -16,13 +16,14 @@
 
 #include <vector>
 #include "behaviortree_cpp_v3/tree_node.h"
+#include "CustomContainer.h"
 
 namespace BT
 {
 class ControlNode : public TreeNode
 {
   protected:
-    std::vector<TreeNode*> children_nodes_;
+    CustomVector<TreeNode*> children_nodes_;
 
   public:
     ControlNode(const std::string& name, const NodeConfiguration& config);
@@ -34,7 +35,7 @@ class ControlNode : public TreeNode
 
     size_t childrenCount() const;
 
-    const std::vector<TreeNode*>& children() const;
+    const CustomVector<TreeNode*>& children() const;
 
     const TreeNode* child(size_t index) const
     {

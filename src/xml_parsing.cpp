@@ -36,6 +36,7 @@
 
 #include "behaviortree_cpp_v3/blackboard.h"
 #include "behaviortree_cpp_v3/utils/demangle_util.h"
+#include "CustomContainer.h"
 
 #include "stack"
 #include "set"
@@ -64,8 +65,8 @@ struct XMLParser::Pimpl
 
     void loadDocImpl(BT_TinyXML2::XMLDocument* doc);
 
-    std::list<std::unique_ptr<BT_TinyXML2::XMLDocument> > opened_documents;
-    std::unordered_map<CustomString,const XMLElement*>  tree_roots;
+    CustomVector<std::unique_ptr<BT_TinyXML2::XMLDocument>> opened_documents;
+    CustomUnorederMap<CustomString, const XMLElement*> tree_roots;
 
     const BehaviorTreeFactory& factory;
 
@@ -105,7 +106,7 @@ XMLParser::~XMLParser()
 
 void XMLParser::loadFromFile(const std::string& filename)
 {
-    _p->opened_documents.emplace_back(new BT_TinyXML2::XMLDocument());
+    _p->opened_documents.push_back(std::unique_ptr<BT_TinyXML2::XMLDocument>(new BT_TinyXML2::XMLDocument()));
 
     BT_TinyXML2::XMLDocument* doc = _p->opened_documents.back().get();
     doc->LoadFile(filename.c_str());
@@ -118,7 +119,7 @@ void XMLParser::loadFromFile(const std::string& filename)
 
 void XMLParser::loadFromText(const std::string& xml_text)
 {
-    _p->opened_documents.emplace_back(new BT_TinyXML2::XMLDocument());
+    _p->opened_documents.push_back(std::unique_ptr<BT_TinyXML2::XMLDocument>(new BT_TinyXML2::XMLDocument()));
 
     BT_TinyXML2::XMLDocument* doc = _p->opened_documents.back().get();
     doc->Parse(xml_text.c_str(), xml_text.size());
@@ -128,7 +129,7 @@ void XMLParser::loadFromText(const std::string& xml_text)
 
 void XMLParser::loadFromText(const CustomString & xml_text)
 {
-    _p->opened_documents.emplace_back(new BT_TinyXML2::XMLDocument());
+    _p->opened_documents.push_back(std::unique_ptr<BT_TinyXML2::XMLDocument>(new BT_TinyXML2::XMLDocument()));
 
     BT_TinyXML2::XMLDocument* doc = _p->opened_documents.back().get();
     doc->Parse(xml_text.c_str(), xml_text.size());
@@ -183,7 +184,7 @@ void XMLParser::Pimpl::loadDocImpl(BT_TinyXML2::XMLDocument* doc)
             file_path = current_path / file_path;
         }
 
-        opened_documents.emplace_back(new BT_TinyXML2::XMLDocument());
+        opened_documents.push_back(std::unique_ptr<BT_TinyXML2::XMLDocument>(new BT_TinyXML2::XMLDocument()));
         BT_TinyXML2::XMLDocument* next_doc = opened_documents.back().get();
         next_doc->LoadFile(file_path.str().c_str());
         loadDocImpl(next_doc);
@@ -532,7 +533,8 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
         //Check that name in remapping can be found in the manifest
         for(const auto& remap_it: port_remap)
         {
-            if( manifest.ports.count( remap_it.first ) == 0 )
+            CustomString custom_port_name(remap_it.first.c_str());
+            if( manifest.ports.count( custom_port_name ) == 0 )
             {
                 throw RuntimeError("Possible typo? In the XML, you tried to remap port \"",
                                    remap_it.first, "\" in node [", ID," / ", instance_name,
@@ -543,7 +545,7 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
         // Initialize the ports in the BB to set the type
         for(const auto& port_it: manifest.ports)
         {
-            const std::string& port_name = port_it.first;
+            std::string port_name = to_std_string(port_it.first);
             const auto& port_info = port_it.second;
 
             auto remap_it = port_remap.find(port_name);
@@ -583,7 +585,8 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
         for(const auto& remap_it: port_remap)
         {
             const auto& port_name = remap_it.first;
-            auto port_it = manifest.ports.find( port_name );
+            CustomString custom_port_name(port_name.c_str());
+            auto port_it = manifest.ports.find( custom_port_name );
             if( port_it != manifest.ports.end() )
             {
                 auto direction = port_it->second.direction();
@@ -601,7 +604,7 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
         // use default value if available for empty ports. Only inputs
         for (const auto& port_it: manifest.ports)
         {
-            const std::string& port_name = port_it.first;
+            std::string port_name = to_std_string(port_it.first);
             const PortInfo& port_info = port_it.second;
 
             auto direction = port_info.direction();
@@ -822,7 +825,7 @@ std::string writeTreeNodesModelXML(const BehaviorTreeFactory& factory)
                 case PortDirection::BT_INOUT: port_element = doc.NewElement("inout_port");  break;
             }
 
-            port_element->SetAttribute("name", port_name.c_str() );
+            port_element->SetAttribute("name", to_std_string(port_name).c_str() );
             if( port_info.type() )
             {
                 port_element->SetAttribute("type", BT::demangle( port_info.type() ).c_str() );

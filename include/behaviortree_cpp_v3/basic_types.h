@@ -15,6 +15,7 @@
 #include "behaviortree_cpp_v3/exceptions.h"
 #include "behaviortree_cpp_v3/utils/expected.hpp"
 #include "behaviortree_cpp_v3/utils/make_unique.hpp"
+#include "CustomContainer.h"
 
 namespace BT
 {
@@ -314,6 +315,9 @@ template <typename T = void> inline
 }
 //----------
 
+// Use standard string keys for API compatibility, but PSRAM for storage
+typedef CustomUnorederMap<CustomString, PortInfo> CustomPortsList;
+// Keep std::unordered_map for API methods that return PortsList
 typedef std::unordered_map<std::string, PortInfo> PortsList;
 
 template <typename T, typename = void>

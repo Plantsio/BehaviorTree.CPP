@@ -5,20 +5,21 @@ namespace BT{
 void Blackboard::setPortInfo(std::string key, const PortInfo& info)
 {
     std::unique_lock<std::mutex> lock(mutex_);
+    CustomString custom_key(key.c_str());
 
     if( auto parent = parent_bb_.lock())
     {
-        auto remapping_it = internal_to_external_.find(key);
+        auto remapping_it = internal_to_external_.find(custom_key);
         if( remapping_it != internal_to_external_.end())
         {
-            parent->setPortInfo( remapping_it->second, info );
+            parent->setPortInfo( to_std_string(remapping_it->second), info );
         }
     }
 
-    auto it = storage_.find(key);
+    auto it = storage_.find(custom_key);
     if( it == storage_.end() )
     {
-        storage_.emplace( key, Entry(info) );
+        storage_.emplace( custom_key, Entry(info) );
     }
     else{
         auto old_type = it->second.port_info.type();
@@ -34,7 +35,8 @@ void Blackboard::setPortInfo(std::string key, const PortInfo& info)
 const PortInfo* Blackboard::portInfo(const std::string &key)
 {
     std::unique_lock<std::mutex> lock(mutex_);
-    auto it = storage_.find(key);
+    CustomString custom_key(key.c_str());
+    auto it = storage_.find(custom_key);
     if( it == storage_.end() )
     {
         return nullptr;
@@ -44,7 +46,7 @@ const PortInfo* Blackboard::portInfo(const std::string &key)
 
 void Blackboard::addSubtreeRemapping(StringView internal, StringView external)
 {
-    internal_to_external_.insert( {static_cast<std::string>(internal), static_cast<std::string>(external)} );
+    internal_to_external_.insert( {CustomString(internal.data(), internal.size()), CustomString(external.data(), external.size())} );
 }
 
 void Blackboard::debugMessage() const
@@ -57,14 +59,14 @@ void Blackboard::debugMessage() const
             port_type = &( entry_it.second.value.type() );
         }
 
-        std::cout <<  entry_it.first << " (" << demangle( port_type ) << ") -> ";
+        std::cout <<  entry_it.first.c_str() << " (" << demangle( port_type ) << ") -> ";
 
         if( auto parent = parent_bb_.lock())
         {
             auto remapping_it = internal_to_external_.find( entry_it.first );
             if( remapping_it != internal_to_external_.end())
             {
-                std::cout << "remapped to parent [" << remapping_it->second << "]" <<std::endl;
+                std::cout << "remapped to parent [" << remapping_it->second.c_str() << "]" <<std::endl;
                 continue;
             }
         }
@@ -81,7 +83,7 @@ std::vector<StringView> Blackboard::getKeys() const
     out.reserve( storage_.size() );
     for(const auto& entry_it: storage_)
     {
-        out.push_back( entry_it.first );
+        out.push_back( StringView(entry_it.first.data(), entry_it.first.size()) );
     }
     return out;
 }

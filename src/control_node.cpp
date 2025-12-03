@@ -36,7 +36,7 @@ void ControlNode::halt()
     setStatus(NodeStatus::IDLE);
 }
 
-const std::vector<TreeNode*>& ControlNode::children() const
+const CustomVector<TreeNode*>& ControlNode::children() const
 {
     return children_nodes_;
 }
