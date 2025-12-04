@@ -37,8 +37,6 @@
 #include "behaviortree_cpp_v3/blackboard.h"
 #include "behaviortree_cpp_v3/utils/demangle_util.h"
 #include "CustomContainer.h"
-#include "tools/tools.h"
-#include <esp_heap_caps.h>
 
 #include <stack>
 #include <set>
@@ -488,15 +486,10 @@ Tree XMLParser::instantiateTree(const Blackboard::Ptr& root_blackboard)
     // first blackboard
 //    output_tree.blackboard_stack.push_back( root_blackboard );
 
-    log_m("instantiateTree before recursivelyCreateTree", MALLOC_CAP_INTERNAL);
-    log_m("instantiateTree SPIRAM", MALLOC_CAP_SPIRAM);
     _p->recursivelyCreateTree(main_tree_ID,
                               output_tree,
                               root_blackboard,
                               TreeNode::Ptr() );
-    log_m("instantiateTree after recursivelyCreateTree", MALLOC_CAP_INTERNAL);
-    log_m("instantiateTree after SPIRAM", MALLOC_CAP_SPIRAM);
-    log_m(("total nodes: " + std::to_string(output_tree.nodes.size())).c_str(), MALLOC_CAP_INTERNAL);
     return output_tree;
 }
 
@@ -688,8 +681,6 @@ void XMLParser::Pimpl::recursivelyCreateTree(const CustomString& tree_ID,
     auto root_element = tree_roots[tree_ID]->FirstChildElement();
     stack.push({root_parent, root_element, blackboard});
 
-    int node_count = 0;
-    size_t internal_before = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
     while (!stack.empty()) {
         auto frame = stack.top();
         stack.pop();
@@ -701,13 +692,6 @@ void XMLParser::Pimpl::recursivelyCreateTree(const CustomString& tree_ID,
         // Create current node
         auto node = createNodeFromXML(element, current_bb, parent_node);
         output_tree.nodes.push_back(node);
-        
-        node_count++;
-        if (node_count == 1 || node_count == 10) {
-            size_t internal_after = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
-            log_m(("after node " + std::to_string(node_count) + " internal used: " + 
-                   std::to_string(internal_before - internal_after)).c_str(), MALLOC_CAP_INTERNAL);
-        }
 
         // Handle subtree nodes
         if (node->type() == NodeType::SUBTREE) {

@@ -14,7 +14,6 @@
 #include "behaviortree_cpp_v3/utils/shared_library.h"
 #include "behaviortree_cpp_v3/xml_parsing.h"
 
-#include "tools/tools.h"    /* fixme */
 
 #ifdef USING_ROS
 #include "filesystem/path.h"
@@ -364,9 +363,7 @@ Tree BehaviorTreeFactory::createTreeFromText(const CustomString &text,
 {
     XMLParser parser(*this);
     parser.loadFromText(text);
-    log_m("soul 1", MALLOC_CAP_INTERNAL);
     auto tree = parser.instantiateTree(blackboard);
-    log_m("soul 2", MALLOC_CAP_INTERNAL);
 //    tree.manifests = this->manifests();
     return tree;
 }
