@@ -3,6 +3,7 @@
 
 #include <string>
 #include <cstring>
+#include <esp_heap_caps.h>
 
 namespace SafeAny
 {
@@ -21,7 +22,8 @@ class SimpleString
     {
         if(size >= sizeof(void*) )
         {
-            _data.ptr = new char[_size + 1];
+            // Allocate in PSRAM instead of internal RAM
+            _data.ptr = static_cast<char*>(heap_caps_malloc(_size + 1, MALLOC_CAP_SPIRAM));
         }
         std::memcpy(data(), input_data, _size);
         data()[_size] = '\0';
@@ -42,7 +44,7 @@ class SimpleString
     {
         if ( _size >= sizeof(void*) && _data.ptr )
         {
-            delete[] _data.ptr;
+            heap_caps_free(_data.ptr);
         }
     }
 

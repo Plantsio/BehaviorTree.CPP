@@ -253,6 +253,87 @@ std::unique_ptr<TreeNode> BehaviorTreeFactory::instantiateTreeNode(
     return node;
 }
 
+std::unique_ptr<TreeNode> BehaviorTreeFactory::instantiateTreeNode(
+        const std::string& name,
+        const CustomString& ID,
+        const NodeConfigurationCustom& custom_config) const
+{
+    auto it = builders_.find(ID);
+    if (it == builders_.end())
+    {
+        std::cerr << ID << " not included in this list:" << std::endl;
+        for (const auto& builder_it: builders_)
+        {
+            std::cerr << builder_it.first << std::endl;
+        }
+        throw RuntimeError("BehaviorTreeFactory: ID [", ID, "] not registered");
+    }
+
+    // Convert custom config to standard config for the builder
+    // This is a temporary allocation that gets cleaned up after node construction
+    NodeConfiguration config;
+    config.blackboard = custom_config.blackboard;
+    
+    // Only convert ports if they exist (optimization to reduce internal RAM usage)
+    if (!custom_config.input_ports.empty()) {
+        config.input_ports.reserve(custom_config.input_ports.size());
+        for (const auto& [key, value] : custom_config.input_ports) {
+            config.input_ports.emplace(to_std_string(key), to_std_string(value));
+        }
+    }
+    if (!custom_config.output_ports.empty()) {
+        config.output_ports.reserve(custom_config.output_ports.size());
+        for (const auto& [key, value] : custom_config.output_ports) {
+            config.output_ports.emplace(to_std_string(key), to_std_string(value));
+        }
+    }
+
+    std::unique_ptr<TreeNode> node = it->second(name, config);
+    node->setRegistrationID( ID );
+    return node;
+}
+
+// Static config to avoid repeated heap allocations - reused for each node
+static thread_local NodeConfiguration s_temp_config;
+static thread_local std::string s_temp_name;
+
+std::unique_ptr<TreeNode> BehaviorTreeFactory::instantiateTreeNode(
+        const CustomString& name,
+        const CustomString& ID,
+        const NodeConfigurationCustom& custom_config) const
+{
+    auto it = builders_.find(ID);
+    if (it == builders_.end())
+    {
+        std::cerr << ID << " not included in this list:" << std::endl;
+        for (const auto& builder_it: builders_)
+        {
+            std::cerr << builder_it.first << std::endl;
+        }
+        throw RuntimeError("BehaviorTreeFactory: ID [", ID, "] not registered");
+    }
+
+    // Reuse static config to avoid heap fragmentation
+    s_temp_config.blackboard = custom_config.blackboard;
+    s_temp_config.input_ports.clear();
+    s_temp_config.output_ports.clear();
+    
+    // Only convert ports if they exist
+    for (const auto& [key, value] : custom_config.input_ports) {
+        s_temp_config.input_ports.emplace(to_std_string(key), to_std_string(value));
+    }
+    for (const auto& [key, value] : custom_config.output_ports) {
+        s_temp_config.output_ports.emplace(to_std_string(key), to_std_string(value));
+    }
+
+    // Reuse static string for name
+    s_temp_name = to_std_string(name);
+    
+    std::unique_ptr<TreeNode> node = it->second(s_temp_name, s_temp_config);
+    node->setRegistrationID( ID );
+    return node;
+}
+
 const CustomUnorederMap<CustomString, NodeBuilder> &BehaviorTreeFactory::builders() const
 {
     return builders_;
@@ -283,7 +364,9 @@ Tree BehaviorTreeFactory::createTreeFromText(const CustomString &text,
 {
     XMLParser parser(*this);
     parser.loadFromText(text);
+    log_m("soul 1", MALLOC_CAP_INTERNAL);
     auto tree = parser.instantiateTree(blackboard);
+    log_m("soul 2", MALLOC_CAP_INTERNAL);
 //    tree.manifests = this->manifests();
     return tree;
 }

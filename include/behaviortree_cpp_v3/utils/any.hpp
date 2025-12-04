@@ -19,6 +19,8 @@
 #include <typeinfo>
 #include <type_traits>
 #include <stdexcept>
+#include <new>  // for placement new
+#include <esp_heap_caps.h>
 
 namespace linb
 {
@@ -197,6 +199,7 @@ class any final
     };
 
     /// VTable for dynamically allocated storage.
+    /// Modified to use PSRAM allocation instead of internal RAM.
     template <typename T>
     struct vtable_dynamic
     {
@@ -208,12 +211,16 @@ class any final
         static void destroy(storage_union& storage) noexcept
         {
             //assert(reinterpret_cast<T*>(storage.dynamic));
-            delete reinterpret_cast<T*>(storage.dynamic);
+            T* ptr = reinterpret_cast<T*>(storage.dynamic);
+            ptr->~T();  // Call destructor
+            heap_caps_free(storage.dynamic);  // Free PSRAM
         }
 
         static void copy(const storage_union& src, storage_union& dest)
         {
-            dest.dynamic = new T(*reinterpret_cast<const T*>(src.dynamic));
+            // Allocate in PSRAM and use placement new
+            void* mem = heap_caps_malloc(sizeof(T), MALLOC_CAP_SPIRAM);
+            dest.dynamic = new(mem) T(*reinterpret_cast<const T*>(src.dynamic));
         }
 
         static void move(storage_union& src, storage_union& dest) noexcept
@@ -342,7 +349,9 @@ class any final
     template <typename ValueType, typename T>
     typename std::enable_if<requires_allocation<T>::value>::type do_construct(ValueType&& value)
     {
-        storage.dynamic = new T(std::forward<ValueType>(value));
+        // Allocate in PSRAM and use placement new
+        void* mem = heap_caps_malloc(sizeof(T), MALLOC_CAP_SPIRAM);
+        storage.dynamic = new(mem) T(std::forward<ValueType>(value));
     }
 
     template <typename ValueType, typename T>

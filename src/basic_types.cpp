@@ -305,20 +305,20 @@ Any PortInfo::parseString(const std::string &str) const
 
 void PortInfo::setDescription(StringView description)
 {
-    description_ = static_cast<std::string>(description);
+    description_ = CustomString(description.data(), description.size());
 }
 
 void PortInfo::setDefaultValue(StringView default_value_as_string)
 {
-    default_value_ = static_cast<std::string>(default_value_as_string);
+    default_value_ = CustomString(default_value_as_string.data(), default_value_as_string.size());
 }
 
-const std::string &PortInfo::description() const
+const CustomString &PortInfo::description() const
 {
     return  description_;
 }
 
-const std::string &PortInfo::defaultValue() const
+const CustomString &PortInfo::defaultValue() const
 {
     return  default_value_;
 }

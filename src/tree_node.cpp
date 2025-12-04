@@ -64,7 +64,9 @@ namespace BT {
     void TreeNode::setStatus(NodeStatus new_status) {
         NodeStatus prev_status;
         {
+#if BT_USE_MUTEX
             std::unique_lock<std::mutex> UniqueLock(state_mutex_);
+#endif
             prev_status = status_;
             status_ = new_status;
         }
@@ -84,12 +86,16 @@ namespace BT {
     }
 
     NodeStatus TreeNode::status() const {
+#if BT_USE_MUTEX
         std::lock_guard<std::mutex> lock(state_mutex_);
+#endif
         return status_;
     }
 
     NodeStatus TreeNode::waitValidStatus() {
+#if BT_USE_MUTEX
         std::unique_lock<std::mutex> lock(state_mutex_);
+#endif
 
 #if BT_USE_CONDITION
         while (isHalted()) {

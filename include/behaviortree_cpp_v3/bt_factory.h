@@ -289,6 +289,20 @@ See examples for more information about configuring CMake correctly
         std::unique_ptr<TreeNode> instantiateTreeNode(const std::string &name, const CustomString &ID,
                                                       const NodeConfiguration &config) const;
 
+        /**
+         * @brief instantiateTreeNode overload that accepts NodeConfigurationCustom directly.
+         * This avoids conversion from std::string-based containers to CustomString-based ones.
+         */
+        std::unique_ptr<TreeNode> instantiateTreeNode(const std::string &name, const CustomString &ID,
+                                                      const NodeConfigurationCustom &config) const;
+
+        /**
+         * @brief instantiateTreeNode overload that accepts CustomString name and NodeConfigurationCustom.
+         * Fully avoids std::string allocations in internal RAM.
+         */
+        std::unique_ptr<TreeNode> instantiateTreeNode(const CustomString &name, const CustomString &ID,
+                                                      const NodeConfigurationCustom &config) const;
+
         /** registerNodeType is the method to use to register your custom TreeNode.
          *
          *  It accepts only classed derived from either ActionNodeBase, DecoratorNode,

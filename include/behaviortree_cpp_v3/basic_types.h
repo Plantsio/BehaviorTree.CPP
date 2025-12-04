@@ -244,17 +244,17 @@ public:
 
     void setDefaultValue(StringView default_value_as_string);
 
-    const std::string& description() const;
+    const CustomString& description() const;
 
-    const std::string& defaultValue() const;
+    const CustomString& defaultValue() const;
 
 private:
 
     PortDirection _type;
     const std::type_info* _info;
     StringConverter _converter;
-    std::string description_;
-    std::string default_value_;
+    CustomString description_;      // Use PSRAM
+    CustomString default_value_;    // Use PSRAM
 };
 
 template <typename T = void>

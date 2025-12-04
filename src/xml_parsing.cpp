@@ -37,9 +37,31 @@
 #include "behaviortree_cpp_v3/blackboard.h"
 #include "behaviortree_cpp_v3/utils/demangle_util.h"
 #include "CustomContainer.h"
+#include "tools/tools.h"
+#include <esp_heap_caps.h>
 
-#include "stack"
-#include "set"
+#include <stack>
+#include <set>
+#include <deque>
+
+// Custom stack using PSRAM allocator
+template<typename T>
+using CustomDeque = std::deque<T, CustomAllocator<T>>;
+
+template<typename T>
+using CustomStack = std::stack<T, CustomDeque<T>>;
+
+// Helper to convert unique_ptr to shared_ptr with PSRAM-allocated control block
+template<typename T>
+std::shared_ptr<T> to_shared_psram(std::unique_ptr<T> ptr) {
+    if (!ptr) return nullptr;
+    T* raw = ptr.release();
+    // Create shared_ptr with custom allocator for control block
+    // The deleter calls the object's operator delete (which uses PSRAM)
+    return std::shared_ptr<T>(raw, 
+        [](T* p) { delete p; },  // Custom deleter
+        CustomAllocator<T>());   // Allocator for control block
+}
 
 namespace BT
 {
@@ -61,7 +83,7 @@ struct XMLParser::Pimpl
                                Blackboard::Ptr blackboard,
                                const TreeNode::Ptr& root_parent);
 
-    void getPortsRecursively(const XMLElement* element, std::vector<std::string> &output_ports);
+    void getPortsRecursively(const XMLElement* element, CustomVector<CustomString> &output_ports);
 
     void loadDocImpl(BT_TinyXML2::XMLDocument* doc);
 
@@ -466,10 +488,15 @@ Tree XMLParser::instantiateTree(const Blackboard::Ptr& root_blackboard)
     // first blackboard
 //    output_tree.blackboard_stack.push_back( root_blackboard );
 
+    log_m("instantiateTree before recursivelyCreateTree", MALLOC_CAP_INTERNAL);
+    log_m("instantiateTree SPIRAM", MALLOC_CAP_SPIRAM);
     _p->recursivelyCreateTree(main_tree_ID,
                               output_tree,
                               root_blackboard,
                               TreeNode::Ptr() );
+    log_m("instantiateTree after recursivelyCreateTree", MALLOC_CAP_INTERNAL);
+    log_m("instantiateTree after SPIRAM", MALLOC_CAP_SPIRAM);
+    log_m(("total nodes: " + std::to_string(output_tree.nodes.size())).c_str(), MALLOC_CAP_INTERNAL);
     return output_tree;
 }
 
@@ -477,13 +504,14 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
                                                   const Blackboard::Ptr &blackboard,
                                                   const TreeNode::Ptr &node_parent)
 {
-    const std::string element_name = element->Name();
+    // Use const char* to avoid std::string allocation in internal RAM
+    const char* element_name = element->Name();
     CustomString ID;
-    std::string instance_name;
+    CustomString instance_name;
 
     // Actions and Decorators have their own ID
-    if (element_name == "Action" || element_name == "Decorator" ||
-        element_name == "Condition" || element_name == "Control")
+    if (StrEqual(element_name, "Action") || StrEqual(element_name, "Decorator") ||
+        StrEqual(element_name, "Condition") || StrEqual(element_name, "Control"))
     {
         ID = element->Attribute("ID");
     }
@@ -502,10 +530,11 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
         instance_name = ID;
     }
 
-    PortsRemapping port_remap;
+    // Use PSRAM-backed container for port remapping
+    PortsRemappingCustom port_remap;
 
-    if (element_name == "SubTree" ||
-        element_name == "SubTreePlus" )
+    if (StrEqual(element_name, "SubTree") ||
+        StrEqual(element_name, "SubTreePlus"))
     {
         instance_name = element->Attribute("ID");
     }
@@ -513,14 +542,14 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
         // do this only if it NOT a Subtree
         for (const XMLAttribute* att = element->FirstAttribute(); att; att = att->Next())
         {
-            const std::string attribute_name = att->Name();
+            const CustomString attribute_name(att->Name());
             if (attribute_name != "ID" && attribute_name != "name")
             {
-                port_remap[attribute_name] = att->Value();
+                port_remap[attribute_name] = CustomString(att->Value());
             }
         }
     }
-    NodeConfiguration config;
+    NodeConfigurationCustom config;
     config.blackboard = blackboard;
 
     //---------------------------------------------
@@ -533,11 +562,11 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
         //Check that name in remapping can be found in the manifest
         for(const auto& remap_it: port_remap)
         {
-            CustomString custom_port_name(remap_it.first.c_str());
+            const CustomString& custom_port_name = remap_it.first;
             if( manifest.ports.count( custom_port_name ) == 0 )
             {
                 throw RuntimeError("Possible typo? In the XML, you tried to remap port \"",
-                                   remap_it.first, "\" in node [", ID," / ", instance_name,
+                                   to_std_string(remap_it.first), "\" in node [", ID," / ", instance_name,
                                    "], but the manifest of this node does not contain a port with this name.");
             }
         }
@@ -548,12 +577,13 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
             std::string port_name = to_std_string(port_it.first);
             const auto& port_info = port_it.second;
 
-            auto remap_it = port_remap.find(port_name);
+            CustomString custom_port_name(port_name.c_str());
+            auto remap_it = port_remap.find(custom_port_name);
             if( remap_it == port_remap.end())
             {
                 continue;
             }
-            StringView param_value = remap_it->second;
+            StringView param_value(remap_it->second.c_str(), remap_it->second.size());
             auto param_res = TreeNode::getRemappedKey(port_name, param_value);
             if( param_res )
             {
@@ -581,12 +611,11 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
             }
         }
 
-        // use manifest to initialize NodeConfiguration
+        // use manifest to initialize NodeConfigurationCustom
         for(const auto& remap_it: port_remap)
         {
-            const auto& port_name = remap_it.first;
-            CustomString custom_port_name(port_name.c_str());
-            auto port_it = manifest.ports.find( custom_port_name );
+            const CustomString& port_name = remap_it.first;
+            auto port_it = manifest.ports.find( port_name );
             if( port_it != manifest.ports.end() )
             {
                 auto direction = port_it->second.direction();
@@ -604,7 +633,7 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
         // use default value if available for empty ports. Only inputs
         for (const auto& port_it: manifest.ports)
         {
-            std::string port_name = to_std_string(port_it.first);
+            const CustomString& port_name = port_it.first;
             const PortInfo& port_info = port_it.second;
 
             auto direction = port_info.direction();
@@ -616,10 +645,11 @@ TreeNode::Ptr XMLParser::Pimpl::createNodeFromXML(const XMLElement *element,
             }
         }
 
-        child_node = factory.instantiateTreeNode(instance_name, ID, config);
+        // Use to_shared_psram to allocate shared_ptr control block in PSRAM
+        child_node = to_shared_psram(factory.instantiateTreeNode(instance_name, ID, config));
     }
     else if( tree_roots.count(ID) != 0) {
-        child_node = std::make_unique<SubtreeNode>( instance_name );
+        child_node = to_shared_psram(std::make_unique<SubtreeNode>( to_std_string(instance_name) ));
     }
     else{
         throw RuntimeError( ID, " is not a registered node, nor a Subtree");
@@ -644,19 +674,22 @@ void XMLParser::Pimpl::recursivelyCreateTree(const CustomString& tree_ID,
                                              Blackboard::Ptr blackboard,
                                              const TreeNode::Ptr& root_parent)
 {
-    // Define stack frame structure
+    // Define stack frame structure - uses PSRAM via CustomStack
     struct StackFrame {
         TreeNode::Ptr parent;
         const XMLElement* element;
         Blackboard::Ptr blackboard;
     };
 
-    std::stack<StackFrame> stack;
+    // Use PSRAM-backed stack
+    CustomStack<StackFrame> stack;
 
     // Push root node
     auto root_element = tree_roots[tree_ID]->FirstChildElement();
     stack.push({root_parent, root_element, blackboard});
 
+    int node_count = 0;
+    size_t internal_before = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
     while (!stack.empty()) {
         auto frame = stack.top();
         stack.pop();
@@ -668,6 +701,13 @@ void XMLParser::Pimpl::recursivelyCreateTree(const CustomString& tree_ID,
         // Create current node
         auto node = createNodeFromXML(element, current_bb, parent_node);
         output_tree.nodes.push_back(node);
+        
+        node_count++;
+        if (node_count == 1 || node_count == 10) {
+            size_t internal_after = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
+            log_m(("after node " + std::to_string(node_count) + " internal used: " + 
+                   std::to_string(internal_before - internal_after)).c_str(), MALLOC_CAP_INTERNAL);
+        }
 
         // Handle subtree nodes
         if (node->type() == NodeType::SUBTREE) {
@@ -701,7 +741,8 @@ void XMLParser::Pimpl::recursivelyCreateTree(const CustomString& tree_ID,
             }
             else if (auto subtree_plus = dynamic_cast<SubtreePlusNode*>(node.get())) {
                 auto new_bb = Blackboard::create(current_bb);
-                std::set<StringView> mapped_keys;
+                // Use PSRAM-backed set for mapped keys
+                CustomSet<CustomString> mapped_keys;
                 bool do_autoremap = false;
 
                 // Process attributes
@@ -718,21 +759,23 @@ void XMLParser::Pimpl::recursivelyCreateTree(const CustomString& tree_ID,
                     if (TreeNode::isBlackboardPointer(attr_value)) {
                         StringView port_name = TreeNode::stripBlackboardPointer(attr_value);
                         new_bb->addSubtreeRemapping(attr_name, port_name);
-                        mapped_keys.insert(attr_name);
+                        mapped_keys.insert(CustomString(attr_name));
                     } else {
                         new_bb->set(attr_name, static_cast<std::string>(attr_value));
-                        mapped_keys.insert(attr_name);
+                        mapped_keys.insert(CustomString(attr_name));
                     }
                 }
 
                 // Handle auto-remapping
                 if (do_autoremap) {
-                    std::vector<std::string> remapped_ports;
+                    // Use PSRAM-backed vector for remapped ports
+                    CustomVector<CustomString> remapped_ports;
                     auto new_root_element = tree_roots[node->name()]->FirstChildElement();
                     getPortsRecursively(new_root_element, remapped_ports);
                     for (const auto& port : remapped_ports) {
                         if (mapped_keys.count(port) == 0) {
-                            new_bb->addSubtreeRemapping(port, port);
+                            std::string port_str = to_std_string(port);
+                            new_bb->addSubtreeRemapping(port_str, port_str);
                         }
                     }
                 }
@@ -744,8 +787,8 @@ void XMLParser::Pimpl::recursivelyCreateTree(const CustomString& tree_ID,
         }
         // Handle regular nodes with children
         else {
-            // Collect children in reverse order
-            std::vector<const XMLElement*> children;
+            // Use PSRAM-backed vector for children
+            CustomVector<const XMLElement*> children;
             for (auto child = element->FirstChildElement(); child; child = child->NextSiblingElement()) {
                 children.push_back(child);
             }
@@ -760,7 +803,7 @@ void XMLParser::Pimpl::recursivelyCreateTree(const CustomString& tree_ID,
 
 
 void XMLParser::Pimpl::getPortsRecursively(const XMLElement *element,
-                                           std::vector<std::string>& output_ports)
+                                           CustomVector<CustomString>& output_ports)
 {
     for (const XMLAttribute* attr = element->FirstAttribute(); attr != nullptr; attr = attr->Next())
     {
@@ -771,7 +814,7 @@ void XMLParser::Pimpl::getPortsRecursively(const XMLElement *element,
              TreeNode::isBlackboardPointer(attr_value) )
         {
             auto port_name = TreeNode::stripBlackboardPointer(attr_value);
-            output_ports.push_back( static_cast<std::string>(port_name) );
+            output_ports.push_back( CustomString(port_name.data(), port_name.size()) );
         }
     }
 

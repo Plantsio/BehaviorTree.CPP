@@ -13,6 +13,7 @@
 #include "behaviortree_cpp_v3/utils/safe_any.hpp"
 #include "behaviortree_cpp_v3/exceptions.h"
 #include "CustomContainer.h"
+#include <esp_heap_caps.h>
 
 namespace BT
 {
@@ -26,6 +27,25 @@ class Blackboard
   public:
     typedef std::shared_ptr<Blackboard> Ptr;
 
+    // Custom new/delete to allocate Blackboard in PSRAM
+    static void* operator new(std::size_t size) {
+        void* ptr = heap_caps_malloc(size, MALLOC_CAP_SPIRAM);
+        if (!ptr) throw std::bad_alloc();
+        return ptr;
+    }
+
+    static void operator delete(void* ptr) {
+        heap_caps_free(ptr);
+    }
+
+    static void* operator new[](std::size_t size) {
+        return operator new(size);
+    }
+
+    static void operator delete[](void* ptr) {
+        operator delete(ptr);
+    }
+
   protected:
     // This is intentionally protected. Use Blackboard::create instead
     Blackboard(Blackboard::Ptr parent): parent_bb_(parent)
@@ -38,7 +58,11 @@ class Blackboard
     */
     static Blackboard::Ptr create(Blackboard::Ptr parent = {})
     {
-        return std::shared_ptr<Blackboard>( new Blackboard(parent) );
+        // Use custom new (PSRAM) and shared_ptr with custom allocator for control block
+        Blackboard* raw = new Blackboard(parent);
+        return std::shared_ptr<Blackboard>(raw,
+            [](Blackboard* p) { delete p; },  // Custom deleter
+            CustomAllocator<Blackboard>());   // Allocator for control block in PSRAM
     }
 
     virtual ~Blackboard() = default;

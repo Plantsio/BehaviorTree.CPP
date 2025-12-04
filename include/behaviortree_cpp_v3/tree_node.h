@@ -30,6 +30,7 @@
 
 #define BT_USE_SIGNAL           0
 #define BT_USE_CONDITION        0
+#define BT_USE_MUTEX            0  // Set to 0 for single-threaded use to save ~80 bytes per node
 
 namespace BT {
     void resetUID();
@@ -221,7 +222,9 @@ namespace BT {
         std::condition_variable state_condition_variable_;
 #endif
 
+#if BT_USE_MUTEX
         mutable std::mutex state_mutex_;
+#endif
 
 #if BT_USE_SIGNAL
         StatusChangeSignal state_change_signal_;
